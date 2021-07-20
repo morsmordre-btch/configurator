@@ -27,14 +27,17 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    graphicsitem.cpp
+    graphicsitem.cpp \
+    tableforied.cpp
 
 HEADERS += \
         mainwindow.h \
-    graphicsitem.h
+    graphicsitem.h \
+    tableforied.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    tableforied.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

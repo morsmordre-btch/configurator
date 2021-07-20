@@ -1,21 +1,30 @@
 #include "graphicsitem.h"
 
-
+int GraphicsItem::itemsCounter = 0;
 
 GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGroup ()
 {
     initFont();
-    text->setText("КП1");
-
+    itemsCounter++;
+    itemCount = itemsCounter;
+    // в название элемента добавляем его порядковый номер
+    text->setText(QString("КП").append(QString::number(itemsCounter)));
     initPosItem(QPointF(50,50));
 
+    qDebug() << itemsCounter;
     addToGroup(text);
     addToGroup(rectangle);
+
+    // Окно для таблицы
+
+    table = std::make_shared<TableForIed>(itemCount);
+
+
 }
 
 GraphicsItem::~GraphicsItem()
 {
-
+    itemsCounter--;
 }
 
 QRectF GraphicsItem::boundingRect() const
@@ -80,10 +89,17 @@ void GraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     Q_UNUSED(event);
 }
 
+void GraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    //delete this;
+    table->show();
+    Q_UNUSED(event);
+}
+
 void GraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setPen(Qt::black);
-    painter->drawRoundedRect(0,0,100,50,5,5);
+    //painter->drawRoundedRect(0,0,100,50,5,5);
 
     Q_UNUSED(painter);
     Q_UNUSED(option);
