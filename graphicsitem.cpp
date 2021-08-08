@@ -7,15 +7,17 @@ GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGrou
     initFont();
     itemsCounter++;
     itemCount = itemsCounter;
+
     // в название элемента добавляем его порядковый номер
     text->setText(QString("КП").append(QString::number(itemsCounter)));
     initPosItem(QPointF(50,50));
 
-    qDebug() << itemsCounter;
+
     addToGroup(text);
     addToGroup(rectangle);
 
-    // Окно для таблицы
+
+    // Создаем окно для таблицы
 
     table = std::make_shared<TableForIed>(itemCount);
 
