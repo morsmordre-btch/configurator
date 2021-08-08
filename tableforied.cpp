@@ -18,14 +18,36 @@ TableForIed::TableForIed(int itemCount, QWidget *parent) :
     ui->tableWidgetSpi->verticalHeader()->setVisible(false);
     ui->tableWidgetRs->verticalHeader()->setVisible(false);
 
+    // Создаем окно для таблицы модулей
 
+
+
+
+    // Вместе с каждой новой строкой создаем новую таблицу, соответствующую модулю, который описывается в текущей строке
     for(int i = 0; i < 10; i++){
         ui->tableWidgetSpi->insertRow(i);
-    }
+        vectorTableForModule.push_back(std::make_shared<TableForModule>(i));
+        for (int j = 0; j < 4; j++) {
+            // Также создаем новый указатель на каждую ячейку таблицы, и записываем в вектор ячеек таблицы
+            vectorTableItem.push_back(std::make_unique<QTableWidgetItem>(tr("%1").arg((i+1)*(j+1))));
+            ui->tableWidgetSpi->setItem(i, j, vectorTableItem[vectorTableItem.size()-1].get());
 
+        }
+    }
+    //ui->tableWidgetSpi->item(1,1)->setText("AI-2");
 }
 
 TableForIed::~TableForIed()
 {
     delete ui;
+}
+
+void TableForIed::on_tableWidgetSpi_cellDoubleClicked(int row, int column)
+{
+    // Необходимо условие, чтобы открывать таблицу модуля, только при нажатии на ячейку с Типом самого модуля, то есть только самая первая колонка
+    if (column == 0)
+        vectorTableForModule[row]->show();
+    else
+        return;
+
 }
