@@ -9,6 +9,9 @@
 #include <tableforied.h>
 #include <vector>
 #include <memory>
+#include <QMenu>
+#include <QToolBar>
+#include <QMenuBar>
 
 namespace Ui {
 class MainWindow;
@@ -25,7 +28,7 @@ public:
     ~MainWindow();
 
     // Создаем вектор графических объектов
-    std::vector<std::shared_ptr<GraphicsItem>> graphicsItemVector;
+    std::vector<std::unique_ptr<GraphicsItem>> graphicsItemVector;
 
 
 private slots:
@@ -33,7 +36,30 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+public slots:
+    void slotDeleteFromVector(int itemCount);
+
+    /**************************************************************
+     *
+     *        Слоты для обработки нажатий menuBar и toolBar
+     *
+     **************************************************************/
+    // Слоты для обработки нажатия на отправку, либо прием XML-файла //
+    void slotExportXml();
+    void slotImportXml();
+    // Слоты для обработки нажатия Сохранить, Выйти //
+    void slotSave();
+    void slotQuit();
+
+
 private:
+    QPixmap exportPix;
+
+    QToolBar *createToolBar();
+    QMenuBar *createMenuBar();
+    QMenu *createSubMenuBarFile();
+    QMenu *createSubMenuBarTools();
+
     Ui::MainWindow *ui;
 };
 

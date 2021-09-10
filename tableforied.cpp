@@ -24,17 +24,17 @@ TableForIed::TableForIed(int itemCount, QWidget *parent) :
 
 
     // Вместе с каждой новой строкой создаем новую таблицу, соответствующую модулю, который описывается в текущей строке
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 1; i++){
         ui->tableWidgetSpi->insertRow(i);
         vectorTableForModule.push_back(std::make_shared<TableForModule>(i));
         for (int j = 0; j < 4; j++) {
             // Также создаем новый указатель на каждую ячейку таблицы, и записываем в вектор ячеек таблицы
-            vectorTableItem.push_back(std::make_unique<QTableWidgetItem>(tr("%1").arg((i+1)*(j+1))));
+            vectorTableItem.push_back(std::make_unique<QTableWidgetItem>(tr("%1").arg("")));
             ui->tableWidgetSpi->setItem(i, j, vectorTableItem[vectorTableItem.size()-1].get());
-
         }
     }
-    //ui->tableWidgetSpi->item(1,1)->setText("AI-2");
+    vectorTableItem[0]->setText("AI-A");
+    vectorTableItem[1]->setText("AI-B");
 }
 
 TableForIed::~TableForIed()

@@ -1,0 +1,14 @@
+<modulesList>
+	<module>
+		<type>AI-2</type>
+		<slaveId>129</slaveId>
+		<serialNum>25555</serialNum>
+		<freq>100</freq>
+	</module>
+	<module>
+		<type>AO-2</type>
+		<slaveId>130</slaveId>
+		<serialNum>26666</serialNum>
+		<freq>100</freq>
+	</module>
+</modulesList>

@@ -2,15 +2,22 @@
 
 int GraphicsItem::itemsCounter = 0;
 
-GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGroup ()
+
+GraphicsItem::GraphicsItem(/*std::shared_ptr<QMenu> contextMenu,*/QObject *parent) : QObject(parent), QGraphicsItemGroup ()
 {
     initFont();
     itemsCounter++;
     itemCount = itemsCounter;
 
+    //this->contextMenu = contextMenu;
+
+    this->contextMenu = new QMenu();
+
+    //this->contextMenu = std::make_unique<QMenu>();
+
     // в название элемента добавляем его порядковый номер
-    text->setText(QString("КП").append(QString::number(itemsCounter)));
-    initPosItem(QPointF(50,50));
+    text->setText(QString("КП").append(QString::number(itemCount)));
+    initPosItem(QPointF(std::rand()%100,std::rand()%100));
 
 
     addToGroup(text);
@@ -19,9 +26,20 @@ GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGrou
 
     // Создаем окно для таблицы
 
-    table = std::make_shared<TableForIed>(itemCount);
+    table = std::make_unique<TableForIed>(itemCount);
+
+    // Создаем окно для настроек
+
+    settingItem = std::make_unique<SettingItem>();
 
 
+    // Создание контекстного меню
+    setting = this->contextMenu->addAction("Настройка");
+    this->contextMenu->addSeparator();
+    del = this->contextMenu->addAction("Удалить");
+    connect(setting,SIGNAL(triggered()), SLOT(slotSetting()));
+    connect(del,SIGNAL(triggered()),SLOT(slotDel()));
+    //
 }
 
 GraphicsItem::~GraphicsItem()
@@ -93,10 +111,29 @@ void GraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void GraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    //delete this;
     table->show();
     Q_UNUSED(event);
 }
+
+void GraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    //contextMenu->exec(event->screenPos());
+    contextMenu->popup(event->screenPos());
+}
+
+void GraphicsItem::slotDel() {
+    contextMenu->hide();
+    delete setting;
+    delete del;
+
+    emit signalDel(itemCount);
+    contextMenu->deleteLater();
+}
+
+void GraphicsItem::slotSetting() {
+    settingItem->show();
+}
+
 
 void GraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

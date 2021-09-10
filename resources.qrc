@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>export.png</file>
+        <file>import.png</file>
+        <file>save.png</file>
+        <file>savexml.png</file>
+    </qresource>
+</RCC>

@@ -28,19 +28,25 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     graphicsitem.cpp \
+    settingitem.cpp \
     tableforied.cpp \
     tableformodule.cpp
 
 HEADERS += \
         mainwindow.h \
     graphicsitem.h \
+    settingitem.h \
     tableforied.h \
     tableformodule.h
 
 FORMS += \
         mainwindow.ui \
+    settingitem.ui \
     tableforied.ui \
     tableformodule.ui
+
+RESOURCES += \
+    resources.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
