@@ -3,26 +3,19 @@
 int GraphicsItem::itemsCounter = 0;
 
 
-GraphicsItem::GraphicsItem(/*std::shared_ptr<QMenu> contextMenu,*/QObject *parent) : QObject(parent), QGraphicsItemGroup ()
+GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGroup ()
 {
     initFont();
     itemsCounter++;
     itemCount = itemsCounter;
 
-    //this->contextMenu = contextMenu;
-
-    this->contextMenu = new QMenu();
-
-    //this->contextMenu = std::make_unique<QMenu>();
-
     // в название элемента добавляем его порядковый номер
     text->setText(QString("КП").append(QString::number(itemCount)));
-    initPosItem(QPointF(std::rand()%100,std::rand()%100));
-
+    // располагаем графический объект в случайном месте
+    initPosItem(QPointF(std::rand()%100, std::rand()%100));
 
     addToGroup(text);
     addToGroup(rectangle);
-
 
     // Создаем окно для таблицы
 
@@ -32,14 +25,9 @@ GraphicsItem::GraphicsItem(/*std::shared_ptr<QMenu> contextMenu,*/QObject *paren
 
     settingItem = std::make_unique<SettingItem>();
 
+    // Создание контекстного меню для объекта
+    createContextMenu();
 
-    // Создание контекстного меню
-    setting = this->contextMenu->addAction("Настройка");
-    this->contextMenu->addSeparator();
-    del = this->contextMenu->addAction("Удалить");
-    connect(setting,SIGNAL(triggered()), SLOT(slotSetting()));
-    connect(del,SIGNAL(triggered()),SLOT(slotDel()));
-    //
 }
 
 GraphicsItem::~GraphicsItem()
@@ -90,6 +78,18 @@ void GraphicsItem::initPosItem(QPointF coords)
 
 }
 
+void GraphicsItem::createContextMenu() {
+    contextMenu = new QMenu();
+    contextMenu->addAction("Отправить XML-файл", this, SLOT(slotExportXml()));
+    contextMenu->addAction("Принять XML-файл", this, SLOT(slotImportXml()));
+    contextMenu->addAction("Выполнить диагностику", this, SLOT(slotDiagnostic()));
+    contextMenu->addAction("Настройка", this, SLOT(slotSetting()));
+    contextMenu->addSeparator();
+    contextMenu->addAction("Удалить", this, SLOT(slotDel()));
+}
+
+
+
 void GraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     // Устанавливаем координаты объекта в новые координаты минус исходные координаты
@@ -117,16 +117,13 @@ void GraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 void GraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    //contextMenu->exec(event->screenPos());
     contextMenu->popup(event->screenPos());
 }
 
 void GraphicsItem::slotDel() {
-    contextMenu->hide();
-    delete setting;
-    delete del;
-
+    // Отправляем сигнал в mainwindow на удаление текущего графического объекта
     emit signalDel(itemCount);
+    // удаляем контекстное меню
     contextMenu->deleteLater();
 }
 
@@ -134,6 +131,17 @@ void GraphicsItem::slotSetting() {
     settingItem->show();
 }
 
+void GraphicsItem::slotExportXml() {
+    qDebug() << "export XML-file \n";
+}
+
+void GraphicsItem::slotImportXml() {
+    qDebug() << "import XML-file \n";
+}
+
+void GraphicsItem::slotDiagnostic() {
+    qDebug() << "diagnostic \n";
+}
 
 void GraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

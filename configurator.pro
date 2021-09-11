@@ -22,7 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += c++14
+CONFIG += c++20
 
 SOURCES += \
         main.cpp \
@@ -30,14 +30,16 @@ SOURCES += \
     graphicsitem.cpp \
     settingitem.cpp \
     tableforied.cpp \
-    tableformodule.cpp
+    tableformodule.cpp \
+    xmlparser.cpp
 
 HEADERS += \
         mainwindow.h \
     graphicsitem.h \
     settingitem.h \
     tableforied.h \
-    tableformodule.h
+    tableformodule.h \
+    xmlparser.h
 
 FORMS += \
         mainwindow.ui \

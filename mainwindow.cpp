@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowTitle("Конфигуратор устройств АСУ ТП");
 
-
     addToolBar(Qt::TopToolBarArea, createToolBar());
     setMenuBar(createMenuBar());
 
@@ -19,9 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     scene->setSceneRect(0,0,5000,5000);
-
-
-
 }
 
 MainWindow::~MainWindow()
@@ -59,11 +55,21 @@ void MainWindow::slotDeleteFromVector(int itemCount)
 
 QToolBar *MainWindow::createToolBar() {
     QToolBar *toolBar = new QToolBar("Tool Bar", this );
-
     toolBar->addAction(QPixmap(":/save.png"), "Сохранить", this, SLOT(slotSave()));
+    toolBar->addAction(QPixmap(":/savexml.png"), "Парсинг XML-файла", this, SLOT(slotParsingXml()));
+    toolBar->addAction(QPixmap(":/formxml.png"), "Формирование XML-файла", this, SLOT(slotFormingXml()));
     toolBar->addAction(QPixmap(":/import.png"), "Прием XML-файла", this, SLOT(slotImportXml()));
     toolBar->addAction(QPixmap(":/export.png"), "Отправка XML-файла", this, SLOT(slotExportXml()));
     return toolBar;
+}
+
+void MainWindow::slotParsingXml() {
+    XmlParser parser(graphicsItemVector[0].get(), ":/example.xml");
+    qDebug() << "parsing XML shit \n";
+}
+
+void MainWindow::slotFormingXml() {
+    qDebug() << "forming XML shit \n";
 }
 
 void MainWindow::slotExportXml() {
@@ -85,6 +91,8 @@ QMenuBar *MainWindow::createMenuBar() {
 
 QMenu *MainWindow::createSubMenuBarTools() {
     QMenu *menu = new QMenu("Инструменты", this);
+    menu->addAction("Парсинг XML-файла", this, SLOT(slotParsingXml()));
+    menu->addAction("Формирование XML-файла", this, SLOT(slotFormingXml()));
     menu->addAction("Прием XML-файла", this, SLOT(slotImportXml()));
     menu->addAction("Отправка XML-файла", this, SLOT(slotExportXml()));
     return menu;

@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <QComboBox>
 #include <memory>
+#include <QDebug>
+#include <vector>
+#include <QTableWidgetItem>
 
 namespace Ui {
 class TableForModule;
@@ -19,8 +22,17 @@ public:
 
     // Создаем вектор комбо боксов
     std::vector<std::unique_ptr<QComboBox>> vectorComboBox;
+
+    void updateTable(QString typeModule);
+
+
+
 private:
+
+    std::vector<std::unique_ptr<QTableWidgetItem>> vectorTableItem;
+
     Ui::TableForModule *ui;
+    QString typeModule;
 };
 
 #endif // TABLEFORMODULE_H

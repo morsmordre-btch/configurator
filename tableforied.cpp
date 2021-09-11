@@ -18,23 +18,12 @@ TableForIed::TableForIed(int itemCount, QWidget *parent) :
     ui->tableWidgetSpi->verticalHeader()->setVisible(false);
     ui->tableWidgetRs->verticalHeader()->setVisible(false);
 
-    // Создаем окно для таблицы модулей
 
 
 
 
-    // Вместе с каждой новой строкой создаем новую таблицу, соответствующую модулю, который описывается в текущей строке
-    for(int i = 0; i < 1; i++){
-        ui->tableWidgetSpi->insertRow(i);
-        vectorTableForModule.push_back(std::make_shared<TableForModule>(i));
-        for (int j = 0; j < 4; j++) {
-            // Также создаем новый указатель на каждую ячейку таблицы, и записываем в вектор ячеек таблицы
-            vectorTableItem.push_back(std::make_unique<QTableWidgetItem>(tr("%1").arg("")));
-            ui->tableWidgetSpi->setItem(i, j, vectorTableItem[vectorTableItem.size()-1].get());
-        }
-    }
-    vectorTableItem[0]->setText("AI-A");
-    vectorTableItem[1]->setText("AI-B");
+
+
 }
 
 TableForIed::~TableForIed()
@@ -45,9 +34,56 @@ TableForIed::~TableForIed()
 void TableForIed::on_tableWidgetSpi_cellDoubleClicked(int row, int column)
 {
     // Необходимо условие, чтобы открывать таблицу модуля, только при нажатии на ячейку с Типом самого модуля, то есть только самая первая колонка
-    if (column == 0)
-        vectorTableForModule[row]->show();
+    if (column == 0) {
+        if (vectorTableSpiItem[row*5]->text().contains("DI") |
+            vectorTableSpiItem[row*5]->text().contains("DO") )
+            return;
+        vectorTableForModuleSpi[row]->show();
+        vectorTableForModuleSpi[row]->updateTable(vectorTableSpiItem[row*5]->text());
+    }
     else
         return;
 
 }
+
+void TableForIed::on_tableWidgetRs_cellDoubleClicked(int row, int column)
+{
+    // Необходимо условие, чтобы открывать таблицу модуля, только при нажатии на ячейку с Типом самого модуля, то есть только самая первая колонка
+    if (column == 0) {
+        if (vectorTableRsItem[row*5]->text().contains("DI") |
+            vectorTableRsItem[row*5]->text().contains("DO") )
+            return;
+        vectorTableForModuleRs[row]->show();
+        vectorTableForModuleRs[row]->updateTable(vectorTableRsItem[row*5]->text());
+    }
+    else
+        return;
+}
+
+void TableForIed::insertRowsForSpi() {
+    // Вместе с каждой новой строкой создаем новую таблицу, соответствующую модулю, который описывается в текущей строке
+    //for(int i = 0; i < number; i++){
+        ui->tableWidgetSpi->insertRow(ui->tableWidgetSpi->rowCount());
+        vectorTableForModuleSpi.push_back(std::make_shared<TableForModule>());
+        for (int j = 0; j < 5; j++) {
+            // Также создаем новый указатель на каждую ячейку таблицы, и записываем в вектор ячеек таблицы
+            vectorTableSpiItem.push_back(std::make_unique<QTableWidgetItem>(tr("%1").arg("")));
+            ui->tableWidgetSpi->setItem(ui->tableWidgetSpi->rowCount()-1, j, vectorTableSpiItem[vectorTableSpiItem.size()-1].get());
+        }
+    //}
+}
+
+void TableForIed::insertRowsForRs() {
+    // Вместе с каждой новой строкой создаем новую таблицу, соответствующую модулю, который описывается в текущей строке
+    //for(int i = 0; i < number; i++){
+        ui->tableWidgetRs->insertRow(ui->tableWidgetRs->rowCount());
+        vectorTableForModuleRs.push_back(std::make_shared<TableForModule>());
+        for (int j = 0; j < 5; j++) {
+            // Также создаем новый указатель на каждую ячейку таблицы, и записываем в вектор ячеек таблицы
+            vectorTableRsItem.push_back(std::make_unique<QTableWidgetItem>(tr("%1").arg("")));
+            ui->tableWidgetRs->setItem(ui->tableWidgetRs->rowCount()-1, j, vectorTableRsItem[vectorTableRsItem.size()-1].get());
+        }
+    //}
+}
+
+

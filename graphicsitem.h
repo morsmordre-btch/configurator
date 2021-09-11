@@ -1,6 +1,7 @@
 #ifndef GRAPHICSITEM_H
 #define GRAPHICSITEM_H
 
+#include <QMessageBox>
 #include <QGraphicsItem>
 #include <QFont>
 #include <QFontDatabase>
@@ -18,8 +19,6 @@ class GraphicsItem : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 
 public:
-    GraphicsItem(/*std::shared_ptr<QMenu> contextMenu,*/ QObject *parent = nullptr);
-    ~GraphicsItem();
     QGraphicsRectItem *rectangle = new QGraphicsRectItem();
     QGraphicsSimpleTextItem *text = new QGraphicsSimpleTextItem(rectangle);
 
@@ -31,10 +30,13 @@ public:
     int itemCount;
 
     std::unique_ptr<TableForIed> table;
-
     std::unique_ptr<SettingItem> settingItem;
 
     QRectF boundingRect() const;
+
+    GraphicsItem(QObject *parent = nullptr);
+    ~GraphicsItem();
+
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -42,19 +44,19 @@ public:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
-
 private:
+    QMenu *contextMenu;
+
+    void createContextMenu();
     void initPosItem(QPointF coords);
     void initFont();
-
-    //std::unique_ptr<QMenu> contextMenu;
-    QMenu *contextMenu;
-    QAction *setting;
-    QAction *del;
 
 public slots:
     void slotSetting();
     void slotDel();
+    void slotExportXml();
+    void slotImportXml();
+    void slotDiagnostic();
 
 signals:
     void signalDel(int itemCount);

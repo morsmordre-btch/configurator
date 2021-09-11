@@ -1,14 +1,49 @@
-<modulesList>
-	<module>
-		<type>AI-2</type>
-		<slaveId>129</slaveId>
-		<serialNum>25555</serialNum>
-		<freq>100</freq>
-	</module>
-	<module>
-		<type>AO-2</type>
-		<slaveId>130</slaveId>
-		<serialNum>26666</serialNum>
-		<freq>100</freq>
-	</module>
-</modulesList>
+<?xml version="1.0" encoding="UTF-8"?>
+<iedList>
+	<modulesList ip="192.168.0.0.1"> 
+        	<module interface="RS-485">
+			<type>DI-8</type>
+			<slaveId>110</slaveId>
+			<serialNum>26777</serialNum>
+			<freq>1000</freq>
+			<speed>9600</speed>
+		</module>
+        	<module interface="SPI">
+			<type>AI-2</type>
+			<slaveId>129</slaveId>
+			<serialNum>25555</serialNum>
+			<freq>100</freq>
+			<speed>57600</speed>
+		</module>
+        	<module interface="SPI">
+			<type>AO-2</type>
+			<slaveId>139</slaveId>
+			<serialNum>20000</serialNum>
+			<freq>100</freq>
+			<speed>115200</speed>
+		</module>
+		<module interface="RS-485">
+			<type>DO-8</type>
+			<slaveId>130</slaveId>
+			<serialNum>26666</serialNum>
+			<freq>1000</freq>
+			<speed>4800</speed>
+		</module>
+	</modulesList>
+	<modulesList ip="192.168.0.0.2"> 
+		<module interface="SPI">
+			<type>DI-8</type>
+			<slaveId>55</slaveId>
+			<serialNum>25600</serialNum>
+			<freq>1000</freq>
+			<speed>9600</speed>
+		</module>
+		<module interface="RS-485">
+			<type>DO-8</type>
+			<slaveId>56</slaveId>
+			<serialNum>26600</serialNum>
+			<freq>1000</freq>
+			<speed>4800</speed>
+		</module>
+	</modulesList>
+</iedList>

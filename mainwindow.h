@@ -12,6 +12,8 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QMenuBar>
+#include <xmlparser.h>
+
 
 namespace Ui {
 class MainWindow;
@@ -47,6 +49,9 @@ public slots:
     // Слоты для обработки нажатия на отправку, либо прием XML-файла //
     void slotExportXml();
     void slotImportXml();
+    // Слоты для обработки нажатия на парсинг, либо формирование XML-файла //
+    void slotParsingXml();
+    void slotFormingXml();
     // Слоты для обработки нажатия Сохранить, Выйти //
     void slotSave();
     void slotQuit();

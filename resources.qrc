@@ -5,5 +5,7 @@
         <file>import.png</file>
         <file>save.png</file>
         <file>savexml.png</file>
+        <file>formxml.png</file>
+        <file>example.xml</file>
     </qresource>
 </RCC>
