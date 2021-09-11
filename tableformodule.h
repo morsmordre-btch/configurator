@@ -17,7 +17,7 @@ class TableForModule : public QDialog
     Q_OBJECT
 
 public:
-    explicit TableForModule(int numberOfTypeModule, QWidget *parent = nullptr);
+    explicit TableForModule(QWidget *parent = nullptr);
     ~TableForModule();
 
     // Создаем вектор комбо боксов

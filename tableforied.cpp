@@ -17,13 +17,6 @@ TableForIed::TableForIed(int itemCount, QWidget *parent) :
     // Скрываем вертикальный заголовок
     ui->tableWidgetSpi->verticalHeader()->setVisible(false);
     ui->tableWidgetRs->verticalHeader()->setVisible(false);
-
-
-
-
-
-
-
 }
 
 TableForIed::~TableForIed()

@@ -11,7 +11,6 @@ XmlParser::XmlParser(GraphicsItem *item, QString nameXmlFile)
     while (!xml->atEnd()) {
         if (xml->isStartElement()) {
             if(xml->name() == "modulesList") {
-
                 QXmlStreamAttributes attr = xml->attributes();
                 parsingModulesList(attr.value("ip").toString());
             }
@@ -19,7 +18,6 @@ XmlParser::XmlParser(GraphicsItem *item, QString nameXmlFile)
         xml->readNextStartElement();
     }
     insertToTable(item);
-
     xmlFile->close();
 }
 
@@ -72,7 +70,7 @@ void XmlParser::parsingModulesList(QString ip) {
 
 void XmlParser::insertToTable(GraphicsItem *item) {
     std::map <QString, int>::iterator it;
-    QString ip = "192.168.0.0.1";//item->settingItem->ipIed;
+    QString ip = item->settingItem->ipIed;
     int numberModule;                   // Количество модулей в объекте
     it = mapIpModulesNum.find(ip);
     if (it == mapIpModulesNum.end()) {

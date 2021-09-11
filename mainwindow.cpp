@@ -27,10 +27,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    // Создаем вектор указателей на контекстное меню, который потом передаем в объект GraphicsItem
-    std::shared_ptr<QMenu> contextMenu = std::make_shared<QMenu>();
     // Новый созданный объект помещаем в вектор, чтобы можно было удалять их и тд
-    graphicsItemVector.push_back(std::make_unique<GraphicsItem>(/*contextMenu*/));
+    graphicsItemVector.push_back(std::make_unique<GraphicsItem>());
     connect(
             graphicsItemVector[GraphicsItem::itemsCounter-1].get(),
             &GraphicsItem::signalDel,
@@ -38,7 +36,6 @@ void MainWindow::on_pushButton_clicked()
             &MainWindow::slotDeleteFromVector
     );
     scene->addItem(graphicsItemVector[GraphicsItem::itemsCounter-1].get());
-
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -64,7 +61,9 @@ QToolBar *MainWindow::createToolBar() {
 }
 
 void MainWindow::slotParsingXml() {
-    XmlParser parser(graphicsItemVector[0].get(), ":/example.xml");
+    for(int i = 0; i < GraphicsItem::itemsCounter; i++) {
+        XmlParser parser(graphicsItemVector[i].get(), ":/example.xml");
+    }
     qDebug() << "parsing XML shit \n";
 }
 

@@ -1,7 +1,7 @@
 #include "tableformodule.h"
 #include "ui_tableformodule.h"
 
-TableForModule::TableForModule(int numberOfTypeModule, QWidget *parent) :
+TableForModule::TableForModule(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TableForModule)
 {
