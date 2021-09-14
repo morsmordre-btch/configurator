@@ -4,7 +4,7 @@
         	<module interface="RS-485">
 			<type>DI-8</type>
 			<slaveId>110</slaveId>
-			<serialNum>26777</serialNum>
+			<serialNum>26778</serialNum>
 			<freq>1000</freq>
 			<speed>9600</speed>
 		</module>
