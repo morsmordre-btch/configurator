@@ -1,6 +1,8 @@
 #ifndef GRAPHICSITEM_H
 #define GRAPHICSITEM_H
 
+#include <msgbox.h>
+
 #include <QMessageBox>
 #include <QGraphicsItem>
 #include <QFont>

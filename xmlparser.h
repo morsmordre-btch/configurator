@@ -1,5 +1,6 @@
 #ifndef XMLPARSER_H
 #define XMLPARSER_H
+
 #include <graphicsitem.h>
 
 #include <map>
@@ -26,7 +27,6 @@ private:
     void parsingModulesList(QString ip);
     void insertToTable(GraphicsItem *item);
     QString findContent(QString keyIp, int keyNum, QString keyType);
-    void showMsgBox();
 };
 
 #endif // XMLPARSER_H

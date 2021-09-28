@@ -28,6 +28,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     graphicsitem.cpp \
+    msgbox.cpp \
     settingitem.cpp \
     tableforied.cpp \
     tableformodule.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     graphicsitem.h \
+    msgbox.h \
     settingitem.h \
     tableforied.h \
     tableformodule.h \

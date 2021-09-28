@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>310</width>
+    <width>425</width>
     <height>381</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>310</width>
+    <width>425</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>310</width>
+    <width>425</width>
     <height>16777215</height>
    </size>
   </property>
@@ -43,25 +43,16 @@
          <string>Тип сигнала</string>
         </property>
        </column>
+       <column>
+        <property name="text">
+         <string>Значение</string>
+        </property>
+       </column>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QRadioButton" name="radioButton">
-     <property name="text">
-      <string>&amp;Индивидуальный</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QRadioButton" name="radioButton_2">
-     <property name="text">
-      <string>&amp;Групповой</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
+   <item row="1" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>

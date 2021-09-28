@@ -72,11 +72,13 @@ void XmlParser::parsingModulesList(QString ip) {
 
 void XmlParser::insertToTable(GraphicsItem *item) {
     std::map <QString, int>::iterator it;
-    QString ip = "192.168.0.0.1";//item->settingItem->ipIed;
+    QString ip = "192.168.0.0.5";//item->settingItem->ipIed;
     int numberModule;                   // Количество модулей в объекте
     it = mapIpModulesNum.find(ip);
     if (it == mapIpModulesNum.end()) {
-        showMsgBox();
+        MsgBox("На поле нет контроллеров с IP адрессами из XML-файла.",
+               "Проверьте правильность IP адресса контроллеров в настройках.",
+               WARNING_MSG);
         return;
     }
     std::map<int, QString> interfaceNum = mapIpInterfaceNum.find(ip)->second;
@@ -142,10 +144,3 @@ QString XmlParser::findContent(QString keyIp, int keyNum, QString keyType) {
     return subSubIt->second;
 }
 
-void XmlParser::showMsgBox() {
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Предупреждение");
-    msgBox.setText("На поле нет контроллеров с IP адрессами из XML-файла.");
-    msgBox.setInformativeText("Проверьте правильность IP адресса контроллеров в настройках.");
-    msgBox.exec();
-}
