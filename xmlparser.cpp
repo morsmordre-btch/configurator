@@ -4,7 +4,9 @@ XmlParser::XmlParser(GraphicsItem *item, QString nameXmlFile)
 {
     xmlFile = std::make_unique<QFile>(nameXmlFile);
     if (!xmlFile->open(QIODevice::ReadOnly)) {
-        qDebug() << "Failed to open file ";
+        MsgBox("Не удалось открыть файл.",
+               "Проверьте состояние файла.",
+               WARNING_MSG);
     }
     xml = std::make_unique<QXmlStreamReader>(xmlFile.get());
 
@@ -72,7 +74,7 @@ void XmlParser::parsingModulesList(QString ip) {
 
 void XmlParser::insertToTable(GraphicsItem *item) {
     std::map <QString, int>::iterator it;
-    QString ip = "192.168.0.0.5";//item->settingItem->ipIed;
+    QString ip = "192.168.0.0.1";//item->settingItem->ipIed;
     int numberModule;                   // Количество модулей в объекте
     it = mapIpModulesNum.find(ip);
     if (it == mapIpModulesNum.end()) {

@@ -1,5 +1,22 @@
 #include "msgbox.h"
 
+/*****************************************************
+* Class Name: MsgBox
+******************************************************
+*
+* Summary:
+* Выводит предупрежение или ошибку на экран. Текст
+* передается в качестве аргументов, тип MsgBox
+* также передается в качетсве аргумента
+* Parameters:
+* QString text - основной текст
+* Qstring informativeText - доп. текст
+* int typeMsg - тип сообщения (ошибка ERROR_MSG,
+* предупреждение WARNING_MSG)
+*
+* Returns:
+* -
+******************************************************/
 MsgBox::MsgBox(QString text, QString informativeText, int typeMsg)
 {
     this->text = text;

@@ -15,6 +15,9 @@
 #include <xmlparser.h>
 
 
+#define ALL_ITEM -1
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -47,7 +50,9 @@ public slots:
      *
      **************************************************************/
     // Слоты для обработки нажатия на отправку, либо прием XML-файла //
+    void slotExportXml(int itemCount);
     void slotExportXml();
+    void slotImportXml(int itemCount);
     void slotImportXml();
     // Слоты для обработки нажатия на парсинг, либо формирование XML-файла //
     void slotParsingXml();

@@ -37,13 +37,31 @@ void MainWindow::on_pushButton_clicked()
             this,
             &MainWindow::slotDeleteFromVector
     );
+    connect(
+            graphicsItemVector[GraphicsItem::itemsCounter-1].get(),
+            static_cast<void(GraphicsItem::*)(int)>(&GraphicsItem::signalExportXml),
+            this,
+            static_cast<void(MainWindow::*)(int)>(&MainWindow::slotExportXml)
+    );
+    connect(
+            graphicsItemVector[GraphicsItem::itemsCounter-1].get(),
+            static_cast<void(GraphicsItem::*)(int)>(&GraphicsItem::signalImportXml),
+            this,
+            static_cast<void(MainWindow::*)(int)>(&MainWindow::slotImportXml)
+    );
     scene->addItem(graphicsItemVector[GraphicsItem::itemsCounter-1].get());
 
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    graphicsItemVector.pop_back();
+    if (GraphicsItem::itemsCounter == 0) {
+        MsgBox("Нет графических элементов для удаления.",
+               "",
+               WARNING_MSG);
+        return;
+    } else
+        graphicsItemVector.pop_back();
 }
 
 /* Пофиксить нумерацию КП при удалении и последующим добавлением */
@@ -64,7 +82,13 @@ QToolBar *MainWindow::createToolBar() {
 }
 
 void MainWindow::slotParsingXml() {
-    XmlParser parser(graphicsItemVector[0].get(), ":/example.xml");
+    if (GraphicsItem::itemsCounter == 0) {
+        MsgBox("Добавьте контроллер для записи данных XML-файла.",
+               "",
+               WARNING_MSG);
+        return;
+    } else
+        XmlParser parser(graphicsItemVector[0].get(), ":/example.xml");
     qDebug() << "parsing XML shit \n";
 }
 
@@ -72,12 +96,26 @@ void MainWindow::slotFormingXml() {
     qDebug() << "forming XML shit \n";
 }
 
+void MainWindow::slotExportXml(int itemCount) {
+    if (itemCount == ALL_ITEM)
+        qDebug() << "export XML for all shit \n";
+    else
+        qDebug() << "export XML for one shit \n";
+}
+
 void MainWindow::slotExportXml() {
-    qDebug() << "export XML shit \n";
+        qDebug() << "export XML for all shit \n";
+}
+
+void MainWindow::slotImportXml(int itemCount) {
+    if (itemCount == ALL_ITEM)
+        qDebug() << "import XML for all shit \n";
+    else
+        qDebug() << "import XML for one shit \n";
 }
 
 void MainWindow::slotImportXml() {
-    qDebug() << "import XML shit \n";
+        qDebug() << "import XML for all shit \n";
 }
 
 QMenuBar *MainWindow::createMenuBar() {

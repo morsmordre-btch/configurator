@@ -132,11 +132,13 @@ void GraphicsItem::slotSetting() {
 }
 
 void GraphicsItem::slotExportXml() {
-    qDebug() << "export XML-file \n";
+    emit signalExportXml(itemCount);
+    //qDebug() << "export XML-file \n";
 }
 
 void GraphicsItem::slotImportXml() {
-    qDebug() << "import XML-file \n";
+    emit signalImportXml(itemCount);
+    //qDebug() << "import XML-file \n";
 }
 
 void GraphicsItem::slotDiagnostic() {

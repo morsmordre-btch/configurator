@@ -62,6 +62,8 @@ public slots:
 
 signals:
     void signalDel(int itemCount);
+    void signalExportXml(int itemCount);
+    void signalImportXml(int itemCount);
 
 };
 
