@@ -6,8 +6,9 @@ int GraphicsItem::itemsCounter = 0;
 GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGroup ()
 {
     initFont();
-    itemsCounter++;
     itemCount = itemsCounter;
+    itemsCounter++;
+
 
     // в название элемента добавляем его порядковый номер
     text->setText(QString("КП").append(QString::number(itemCount)));
@@ -24,6 +25,14 @@ GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGrou
     // Создаем окно для настроек
 
     settingItem = std::make_unique<SettingItem>();
+
+    connect(
+            settingItem.get(),
+            &SettingItem::signalSettingItem,
+            this,
+            &GraphicsItem::slotSettingItem
+    );
+
 
     // Создание контекстного меню для объекта
     createContextMenu();
@@ -144,6 +153,36 @@ void GraphicsItem::slotImportXml() {
 void GraphicsItem::slotDiagnostic() {
     qDebug() << "diagnostic \n";
 }
+
+void GraphicsItem::slotSettingItem() {
+    _nameIed = settingItem->getNameIed();
+    _ipIed = settingItem->getIpIed();
+    _macIed = settingItem->getMacIed();
+    _loginIed = settingItem->getLoginIed();
+    _passwordIed = settingItem->getPasswordIed();
+}
+
+QString GraphicsItem::getNameIed() {
+    return _nameIed;
+}
+
+QString GraphicsItem::getIpIed() {
+    return _ipIed;
+}
+
+QString GraphicsItem::getMacIed() {
+    return _macIed;
+}
+
+QString GraphicsItem::getLoginIed() {
+    return _loginIed;
+}
+
+QString GraphicsItem::getPasswordIed(){
+    return _passwordIed;
+}
+
+
 
 void GraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

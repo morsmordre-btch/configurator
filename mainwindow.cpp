@@ -18,6 +18,12 @@ MainWindow::MainWindow(QWidget *parent) :
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     scene->setSceneRect(0,0,5000,5000);
+
+
+    dir.mkdir("export");
+    dir.mkdir("import");
+    nameXmlFile = "control_config.xml";
+    pathToXmlFile = "./export/"+nameXmlFile;
 }
 
 MainWindow::~MainWindow()
@@ -30,7 +36,7 @@ void MainWindow::on_pushButton_clicked()
     // Создаем вектор указателей на контекстное меню, который потом передаем в объект GraphicsItem
     std::shared_ptr<QMenu> contextMenu = std::make_shared<QMenu>();
     // Новый созданный объект помещаем в вектор, чтобы можно было удалять их и тд
-    graphicsItemVector.push_back(std::make_unique<GraphicsItem>(/*contextMenu*/));
+    graphicsItemVector.push_back(std::make_unique<GraphicsItem>());
     connect(
             graphicsItemVector[GraphicsItem::itemsCounter-1].get(),
             &GraphicsItem::signalDel,
@@ -88,7 +94,8 @@ void MainWindow::slotParsingXml() {
                WARNING_MSG);
         return;
     } else
-        XmlParser parser(graphicsItemVector[0].get(), ":/example.xml");
+        for (int i = 0; i < GraphicsItem::itemsCounter; i++)
+            XmlParser parser(graphicsItemVector[i].get(), pathToXmlFile);
     qDebug() << "parsing XML shit \n";
 }
 
@@ -96,28 +103,143 @@ void MainWindow::slotFormingXml() {
     qDebug() << "forming XML shit \n";
 }
 
+
+
+/******************************************************
+*
+* Слот отправки XML файла, вызываемый нажатием кнопки
+* в контекстном меню контроллера. Отправка XML файла
+* происходит только по IP адресу этого контроллера
+*
+******************************************************/
 void MainWindow::slotExportXml(int itemCount) {
-    if (itemCount == ALL_ITEM)
-        qDebug() << "export XML for all shit \n";
-    else
-        qDebug() << "export XML for one shit \n";
+    if ( exportXml(itemCount) ) {
+        MsgBox("Экспорт XML-файла завершен.",
+               "",
+               INFO_MSG);
+    }
+    else {
+        MsgBox("Экспорт XML-файла не был произведен.",
+               "Попробуйте еще раз.",
+               ERROR_MSG);
+    }
+    qDebug() << "export XML for one shit \n";
 }
 
+/******************************************************
+*
+* Слот отправки XML файла, вызываемый нажатием кнопок
+* в главном меню программы. Отправка XML файла
+* происходит для всех контроллеров, добавленных на
+* графическую сцену
+*
+******************************************************/
 void MainWindow::slotExportXml() {
-        qDebug() << "export XML for all shit \n";
+    if ( exportXml(ALL_ITEM) ) {
+        MsgBox("Экспорт XML-файла завершен.",
+               "",
+               INFO_MSG);
+    }
+    else {
+        MsgBox("Экспорт XML-файла не был произведен.",
+               "Попробуйте еще раз.",
+               ERROR_MSG);
+    }
+    qDebug() << "export XML for all shit \n";
 }
 
+/******************************************************
+*
+* Слот приема XML файла, вызываемый нажатием кнопки
+* в контекстном меню контроллера. Прием XML файла
+* происходит только с этого контроллера с текущим
+* IP адресом
+*
+******************************************************/
 void MainWindow::slotImportXml(int itemCount) {
-    if (itemCount == ALL_ITEM)
-        qDebug() << "import XML for all shit \n";
-    else
-        qDebug() << "import XML for one shit \n";
+    if ( importXml(itemCount) ) {
+        MsgBox("Импорт XML-файла завершен.",
+               "",
+               INFO_MSG);
+    }
+    else {
+        MsgBox("Импорт XML-файла не был произведен.",
+               "Попробуйте еще раз.",
+               ERROR_MSG);
+    }
+    qDebug() << "import XML for one shit \n";
 }
 
+/******************************************************
+*
+* Слот приема XML файла, вызываемый нажатием кнопок
+* в главном меню программы. Прием XML файла
+* происходит со всех контроллеров, добавленных
+* на графическую сцену
+*
+******************************************************/
 void MainWindow::slotImportXml() {
+    if ( importXml(ALL_ITEM) ) {
+        MsgBox("Импорт XML-файла завершен.",
+               "",
+               INFO_MSG);
+    }
+    else {
+        MsgBox("Импорт XML-файла не был произведен.",
+               "Попробуйте еще раз.",
+               ERROR_MSG);
+    }
+
         qDebug() << "import XML for all shit \n";
 }
 
+bool MainWindow::exportXml(int itemCount) {
+    if (itemCount == ALL_ITEM) {
+
+    }
+    else {
+        SshCommands ssh;
+        ssh.setIp(graphicsItemVector[itemCount].get()->getIpIed());
+        ssh.setLogin(graphicsItemVector[itemCount].get()->getLoginIed());
+        ssh.setPassword(graphicsItemVector[itemCount].get()->getPasswordIed());
+        ssh.setPort("3333");
+        ssh.exportFile(pathToXmlFile, "/mnt/hdd/k0nstable_fold/test/import/");
+    }
+    return true;
+}
+
+bool MainWindow::importXml(int itemCount) {
+    if (itemCount == ALL_ITEM) {
+
+    }
+    else {
+        SshCommands ssh;
+        ssh.setIp(graphicsItemVector[itemCount].get()->getIpIed());
+        ssh.setLogin(graphicsItemVector[itemCount].get()->getLoginIed());
+        ssh.setPassword(graphicsItemVector[itemCount].get()->getPasswordIed());
+        ssh.setPort("3333");
+        ssh.importFile("/mnt/hdd/k0nstable_fold/test/export/export.xml", "./import/");
+    }
+    return true;
+}
+
+//#IHaTe#ObNoXiOuS#BrAtS#
+
+
+
+/*****************************************************
+* Function Name: createMenuBar
+******************************************************
+*
+* Summary:
+* Создает указатель на меню-бар, в этом меню-баре
+* добавляются разделы "Файл" и "Инструменты"
+* Parameters:
+*
+* Returns:
+* Возвращает указатель на созданный меню-бар
+*
+******************************************************/
 QMenuBar *MainWindow::createMenuBar() {
     QMenuBar *menuBar = new QMenuBar(this);
 
@@ -126,6 +248,8 @@ QMenuBar *MainWindow::createMenuBar() {
 
     return menuBar;
 }
+
+
 
 QMenu *MainWindow::createSubMenuBarTools() {
     QMenu *menu = new QMenu("Инструменты", this);

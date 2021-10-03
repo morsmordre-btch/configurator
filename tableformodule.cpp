@@ -29,11 +29,11 @@ void TableForModule::updateTable(QString typeModule) {
 }
 
 void TableForModule::updateTableForAi() {
-    auto parts = typeModule.split("-");
-    for(int i = 0; i < parts[1].toInt(); i++){
+    auto partsNameModule = typeModule.split("-");
+    for(int i = 0; i < partsNameModule[1].toInt(); i++){
         ui->tableWidget->insertRow(ui->tableWidget->rowCount());
         vectorTableItem.push_back(std::make_unique<QTableWidgetItem>
-                                 (QString(parts[0])+"-"+(QString::number(i+1))));
+                                 (QString(partsNameModule[0])+"-"+(QString::number(i+1))));
         ui->tableWidget->setItem(i,0,
                                  vectorTableItem[vectorTableItem.size() - 1].get());
 
@@ -49,11 +49,11 @@ void TableForModule::updateTableForAi() {
 }
 
 void TableForModule::updateTableForDi() {
-    auto parts = typeModule.split("-");
-    for(int i = 0; i < parts[1].toInt(); i++){
+    auto partsNameModule = typeModule.split("-");
+    for(int i = 0; i < partsNameModule[1].toInt(); i++){
         ui->tableWidget->insertRow(ui->tableWidget->rowCount());
         vectorTableItem.push_back(std::make_unique<QTableWidgetItem>
-                                 (QString(parts[0])+"-"+(QString::number(i+1))));
+                                 (QString(partsNameModule[0])+"-"+(QString::number(i+1))));
         ui->tableWidget->setItem(i,0,
                                  vectorTableItem[vectorTableItem.size() - 1].get());
         vectorTableItem.push_back(std::make_unique<QTableWidgetItem>

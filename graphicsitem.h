@@ -20,6 +20,17 @@ class GraphicsItem : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 
+private:
+    QString _nameIed;
+    QString _ipIed;
+    QString _macIed;
+    QString _loginIed;
+    QString _passwordIed;
+
+    std::unique_ptr<SettingItem> settingItem;
+
+    QMenu *contextMenu;
+
 public:
     QGraphicsRectItem *rectangle = new QGraphicsRectItem();
     QGraphicsSimpleTextItem *text = new QGraphicsSimpleTextItem(rectangle);
@@ -32,12 +43,19 @@ public:
     int itemCount;
 
     std::unique_ptr<TableForIed> table;
-    std::unique_ptr<SettingItem> settingItem;
+
 
     QRectF boundingRect() const;
 
     GraphicsItem(QObject *parent = nullptr);
     ~GraphicsItem();
+
+    QString getNameIed();
+    QString getIpIed();
+    QString getMacIed();
+    QString getLoginIed();
+    QString getPasswordIed();
+
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
@@ -47,18 +65,17 @@ public:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 private:
-    QMenu *contextMenu;
-
     void createContextMenu();
     void initPosItem(QPointF coords);
     void initFont();
 
-public slots:
+private slots:
     void slotSetting();
     void slotDel();
     void slotExportXml();
     void slotImportXml();
     void slotDiagnostic();
+    void slotSettingItem();
 
 signals:
     void signalDel(int itemCount);

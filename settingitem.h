@@ -15,14 +15,21 @@ public:
     explicit SettingItem(QWidget *parent = nullptr);
     ~SettingItem();
 
-    QString nameIed;
-    QString ipIed;
-    QString macIed;
-    QString loginIed;
-    QString passwordIed;
+    QString getNameIed();
+    QString getIpIed();
+    QString getMacIed();
+    QString getLoginIed();
+    QString getPasswordIed();
+
+
 
 private slots:
     void on_buttonBox_accepted();
+
+signals:
+    void signalSettingItem();
+
+
 
 private:
     Ui::SettingItem *ui;

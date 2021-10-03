@@ -29,6 +29,9 @@ MsgBox::MsgBox(QString text, QString informativeText, int typeMsg)
         case WARNING_MSG:
             showWarningMsgBox();
             break;
+        case INFO_MSG:
+            showInfoMsgBox();
+            break;
     }
 
 }
@@ -42,6 +45,13 @@ void MsgBox::showWarningMsgBox() {
 
 void MsgBox::showErrorMsgBox() {
     setWindowTitle("Ошибка");
+    setText(text);
+    setInformativeText(informativeText);
+    exec();
+}
+
+void MsgBox::showInfoMsgBox() {
+    setWindowTitle("Внимание");
     setText(text);
     setInformativeText(informativeText);
     exec();

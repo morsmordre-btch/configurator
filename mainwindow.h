@@ -13,6 +13,9 @@
 #include <QToolBar>
 #include <QMenuBar>
 #include <xmlparser.h>
+#include <sshcommands.h>
+
+#include <QDir>
 
 
 #define ALL_ITEM -1
@@ -65,10 +68,18 @@ public slots:
 private:
     QPixmap exportPix;
 
+    QDir dir;
+
+    QString pathToXmlFile;
+    QString nameXmlFile;
+
     QToolBar *createToolBar();
     QMenuBar *createMenuBar();
     QMenu *createSubMenuBarFile();
     QMenu *createSubMenuBarTools();
+
+    bool exportXml(int itemCount);
+    bool importXml(int itemCount);
 
     Ui::MainWindow *ui;
 };
