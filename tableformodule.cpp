@@ -17,14 +17,23 @@ TableForModule::TableForModule(QWidget *parent) :
 
 
 void TableForModule::updateTable(QString typeModule) {
-    auto parts = typeModule.split("-");
+    this->typeModule = typeModule;
     // Добавляем в название окна Тип модуля
+
     this->setWindowTitle(QString("Таблица модуля ") + typeModule);
 
-    for(int i = 0; i < parts[1].toInt(); i++){
+    if (typeModule.contains("A"))
+        updateTableForAi();
+    else if (typeModule.contains("D"))
+        updateTableForDi();
+}
+
+void TableForModule::updateTableForAi() {
+    auto partsNameModule = typeModule.split("-");
+    for(int i = 0; i < partsNameModule[1].toInt(); i++){
         ui->tableWidget->insertRow(ui->tableWidget->rowCount());
         vectorTableItem.push_back(std::make_unique<QTableWidgetItem>
-                                 (QString(parts[0])+"-"+(QString::number(i+1))));
+                                 (QString(partsNameModule[0])+"-"+(QString::number(i+1))));
         ui->tableWidget->setItem(i,0,
                                  vectorTableItem[vectorTableItem.size() - 1].get());
 
@@ -36,6 +45,22 @@ void TableForModule::updateTable(QString typeModule) {
         vectorComboBox[i].get()->addItem("-10-10 В");
 
         ui->tableWidget->setCellWidget(i,1, vectorComboBox[i].get());
+    }
+}
+
+void TableForModule::updateTableForDi() {
+    auto partsNameModule = typeModule.split("-");
+    for(int i = 0; i < partsNameModule[1].toInt(); i++){
+        ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+        vectorTableItem.push_back(std::make_unique<QTableWidgetItem>
+                                 (QString(partsNameModule[0])+"-"+(QString::number(i+1))));
+        ui->tableWidget->setItem(i,0,
+                                 vectorTableItem[vectorTableItem.size() - 1].get());
+        vectorTableItem.push_back(std::make_unique<QTableWidgetItem>
+                                 ("Логический"));
+        ui->tableWidget->setItem(i,1,
+                                 vectorTableItem[vectorTableItem.size() - 1].get());
+
     }
 }
 

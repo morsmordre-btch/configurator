@@ -5,12 +5,14 @@ int GraphicsItem::itemsCounter = 0;
 
 GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGroup ()
 {
-    initFont();
-    itemsCounter++;
-    itemCount = itemsCounter;
 
+    itemCount = itemsCounter;
+    itemsCounter++;
+
+    initFont();
     // в название элемента добавляем его порядковый номер
-    text->setText(QString("КП").append(QString::number(itemCount)));
+    _nameIed = "КП" + QString::number(itemCount);
+    text->setText(_nameIed);
     // располагаем графический объект в случайном месте
     initPosItem(QPointF(std::rand()%100, std::rand()%100));
 
@@ -24,6 +26,15 @@ GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGrou
     // Создаем окно для настроек
 
     settingItem = std::make_unique<SettingItem>();
+    settingItem->setNameIed(_nameIed);
+
+    connect(
+            settingItem.get(),
+            &SettingItem::signalSettingItem,
+            this,
+            &GraphicsItem::slotSettingItem
+    );
+
 
     // Создание контекстного меню для объекта
     createContextMenu();
@@ -105,7 +116,6 @@ void GraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void GraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-
     Q_UNUSED(event);
 }
 
@@ -132,16 +142,46 @@ void GraphicsItem::slotSetting() {
 }
 
 void GraphicsItem::slotExportXml() {
-    qDebug() << "export XML-file \n";
+    emit signalExportXml(itemCount);
 }
 
 void GraphicsItem::slotImportXml() {
-    qDebug() << "import XML-file \n";
+    emit signalImportXml(itemCount);
 }
 
 void GraphicsItem::slotDiagnostic() {
     qDebug() << "diagnostic \n";
 }
+
+void GraphicsItem::slotSettingItem() {
+    _nameIed = settingItem->getNameIed();
+    _ipIed = settingItem->getIpIed();
+    _macIed = settingItem->getMacIed();
+    _loginIed = settingItem->getLoginIed();
+    _passwordIed = settingItem->getPasswordIed();
+}
+
+QString GraphicsItem::getNameIed() {
+    return _nameIed;
+}
+
+QString GraphicsItem::getIpIed() {
+    return _ipIed;
+}
+
+QString GraphicsItem::getMacIed() {
+    return _macIed;
+}
+
+QString GraphicsItem::getLoginIed() {
+    return _loginIed;
+}
+
+QString GraphicsItem::getPasswordIed(){
+    return _passwordIed;
+}
+
+
 
 void GraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

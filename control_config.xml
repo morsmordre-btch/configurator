@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Subsystem>
+	<Controller ip="192.168.0.0.1">
+		<CType>MB77.07_ref01</CType>
+		<SN>1</SN>
+		<MbRtuReqCicle unit="seconds">1</MbRtuReqCicle>
+	</Controller>
+	<ModulesList>
+	    	<Module interface="SPI">
+			<SlaveID codeFuncR="03" codeFuncW="06" qnt="1" addr="100">33</SlaveID>
+			<MType codeFuncR="03" qnt="1" addr="101">1</MType>
+			<SN codeFuncR="03" qnt="2" addr="102">2</SN>
+			<Speed codeFuncR="03" codeFuncW="06" qnt="2" addr="104">9600</Speed>		
+			<StopB codeFuncR="03" codeFuncW="06" qnt="1" addr="106">1</StopB>
+			<ParitetB codeFuncR="03" codeFuncW="06" qnt="1" addr="107">0000</ParitetB>
+			<Mode codeFuncR="03" codeFuncW="06" qnt="1" addr="100">1</Mode>
+		</Module>
+		<Module interface="SPI">
+			<SlaveID codeFuncR="03" codeFuncW="06" qnt="1" addr="100">34</SlaveID>
+			<MType codeFuncR="03" qnt="1" addr="101">100</MType>
+			<SN codeFuncR="03" qnt="2" addr="102">3</SN>
+			<Speed codeFuncR="03" codeFuncW="06" qnt="2" addr="104">9600</Speed>
+			<Freq>100</Freq>
+			<StopB codeFuncR="03" codeFuncW="06" qnt="1" addr="106">1</StopB>
+			<ParitetB codeFuncR="03" codeFuncW="06" qnt="1" addr="107">0000</ParitetB>
+			<DI_0_15 codeFuncR="02" qnt="16" addr="0"></DI_0_15>
+		</Module>
+		<Module interface="SPI">
+			<SlaveID codeFuncR="03" codeFuncW="06" qnt="1" addr="100">35</SlaveID>
+			<MType codeFuncR="03" qnt="1" addr="101">200</MType>
+			<SN codeFuncR="03" qnt="2" addr="102">4</SN>
+			<Speed codeFuncR="03" codeFuncW="06" qnt="2" addr="104">9600</Speed>
+			<Freq>100</Freq>
+			<StopB codeFuncR="03" codeFuncW="06" qnt="1" addr="106">1</StopB>
+			<ParitetB codeFuncR="03" codeFuncW="06" qnt="1" addr="107">0000</ParitetB>
+			<DO_0_15 codeFuncR="01" codeFuncW="15" qnt="16" addr="0">0000000000000000</DO_0_15>
+		</Module>
+		<Module interface="RS-485">
+			<SlaveID codeFuncR="03" codeFuncW="06" qnt="1" addr="100">36</SlaveID>
+			<MType codeFuncR="03" qnt="1" addr="101">300</MType>
+			<SN codeFuncR="03" qnt="2" addr="102">5</SN>
+			<Speed codeFuncR="03" codeFuncW="06" qnt="2" addr="104">9600</Speed>
+			<Freq>100</Freq>
+			<StopB codeFuncR="03" codeFuncW="06" qnt="1" addr="106">1</StopB>
+			<ParitetB codeFuncR="03" codeFuncW="06" qnt="1" addr="107">0000</ParitetB>
+			<AI_0_7 codeFuncR="04" qnt="8" addr="0">
+				<AI_0></AI_0>
+				<AI_1></AI_1>
+				<AI_2></AI_2>
+				<AI_3></AI_3>
+				<AI_4></AI_4>
+				<AI_5></AI_5>
+				<AI_6></AI_6>
+				<AI_7></AI_7>
+			</AI_0_7>
+			<AI_f_0_7 codeFuncR="04" qnt="16" addr="9">
+				<AI_f_0></AI_f_0>
+				<AI_f_1></AI_f_1>
+				<AI_f_2></AI_f_2>
+				<AI_f_3></AI_f_3>
+				<AI_f_4></AI_f_4>
+				<AI_f_5></AI_f_5>
+				<AI_f_6></AI_f_6>
+				<AI_f_7></AI_f_7>
+			</AI_f_0_7>
+			<Level codeFuncR="03" codeFuncW="06" qnt="1" addr="200">0000</Level>
+		</Module>
+		<Module interface="RS-485">
+			<SlaveID codeFuncR="03" codeFuncW="06" qnt="1" addr="100">37</SlaveID>
+			<MType codeFuncR="03" qnt="1" addr="101">400</MType>
+			<SN codeFuncR="03" qnt="2" addr="102">6</SN>
+			<Speed codeFuncR="03" codeFuncW="06" qnt="2" addr="104">9600</Speed>
+			<Freq>100</Freq>
+			<StopB codeFuncR="03" codeFuncW="06" qnt="1" addr="106">1</StopB>
+			<ParitetB codeFuncR="03" codeFuncW="06" qnt="1" addr="107">0000</ParitetB>
+			<AO_0_7 codeFuncR="03" codeFuncW="16" qnt="8" addr="0">
+				<AO_0>4.0000</AO_0>
+				<AO_1>4.0000</AO_1>
+				<AO_2>4.0000</AO_2>
+				<AO_3>4.0000</AO_3>
+				<AO_4>4.0000</AO_4>
+				<AO_5>4.0000</AO_5>
+				<AO_6>4.0000</AO_6>
+				<AO_7>4.0000</AO_7>
+			</AO_0_7>
+			<AO_f_0_7 codeFuncR="03" codeFuncW="16" qnt="16" addr="9">
+				<AO_f_0>4.000000000000</AO_f_0>
+				<AO_f_1>4.000000000000</AO_f_1>
+				<AO_f_2>4.000000000000</AO_f_2>
+				<AO_f_3>4.000000000000</AO_f_3>
+				<AO_f_4>4.000000000000</AO_f_4>
+				<AO_f_5>4.000000000000</AO_f_5>
+				<AO_f_6>4.000000000000</AO_f_6>
+				<AO_f_7>4.000000000000</AO_f_7>
+			</AO_f_0_7>
+			<Level codeFuncR="03" codeFuncW="06" qnt="1" addr="200">0000</Level>
+		</Module>
+	</ModulesList>
+</Subsystem>

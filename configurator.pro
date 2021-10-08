@@ -29,17 +29,21 @@ SOURCES += \
         mainwindow.cpp \
     graphicsitem.cpp \
     settingitem.cpp \
+    sshcommands.cpp \
     tableforied.cpp \
     tableformodule.cpp \
-    xmlparser.cpp
+    xmlparser.cpp \
+    msgbox.cpp
 
 HEADERS += \
         mainwindow.h \
     graphicsitem.h \
     settingitem.h \
+    sshcommands.h \
     tableforied.h \
     tableformodule.h \
-    xmlparser.h
+    xmlparser.h \
+    msgbox.h
 
 FORMS += \
         mainwindow.ui \

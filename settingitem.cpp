@@ -19,10 +19,30 @@ SettingItem::~SettingItem()
 void SettingItem::on_buttonBox_accepted()
 {
     // Сохраняем введенные настройки
+    emit signalSettingItem();
 
-    nameIed = ui->nameIed->text();
-    ipIed = ui->ipIed->text();
-    macIed = ui->macIed->text();
-    loginIed = ui->loginIed->text();
-    passwordIed = ui->passwordIed->text();
+}
+
+QString SettingItem::getNameIed() {
+    return ui->nameIed->text();
+}
+
+QString SettingItem::getIpIed() {
+    return ui->ipIed->text();
+}
+
+QString SettingItem::getMacIed() {
+    return ui->macIed->text();
+}
+
+QString SettingItem::getLoginIed() {
+    return ui->loginIed->text();
+}
+
+QString SettingItem::getPasswordIed(){
+    return ui->passwordIed->text();
+}
+
+void SettingItem::setNameIed(QString nameIed) {
+    ui->nameIed->setText(nameIed);
 }

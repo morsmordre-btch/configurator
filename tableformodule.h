@@ -31,6 +31,9 @@ private:
 
     std::vector<std::unique_ptr<QTableWidgetItem>> vectorTableItem;
 
+    void updateTableForAi();
+    void updateTableForDi();
+
     Ui::TableForModule *ui;
     QString typeModule;
 };

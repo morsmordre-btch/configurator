@@ -13,6 +13,12 @@
 #include <QToolBar>
 #include <QMenuBar>
 #include <xmlparser.h>
+#include <sshcommands.h>
+
+#include <QDir>
+
+
+#define ALL_ITEM -1
 
 
 namespace Ui {
@@ -47,7 +53,9 @@ public slots:
      *
      **************************************************************/
     // Слоты для обработки нажатия на отправку, либо прием XML-файла //
+    void slotExportXml(int itemCount);
     void slotExportXml();
+    void slotImportXml(int itemCount);
     void slotImportXml();
     // Слоты для обработки нажатия на парсинг, либо формирование XML-файла //
     void slotParsingXml();
@@ -60,10 +68,18 @@ public slots:
 private:
     QPixmap exportPix;
 
+    QDir dir;
+
+    QString pathToXmlFile;
+    QString nameXmlFile;
+
     QToolBar *createToolBar();
     QMenuBar *createMenuBar();
     QMenu *createSubMenuBarFile();
     QMenu *createSubMenuBarTools();
+
+    bool exportXml(int itemCount);
+    bool importXml(int itemCount);
 
     Ui::MainWindow *ui;
 };

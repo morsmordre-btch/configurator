@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>310</width>
+    <width>425</width>
     <height>381</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>310</width>
+    <width>425</width>
     <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>310</width>
+    <width>425</width>
     <height>16777215</height>
    </size>
   </property>
@@ -41,6 +41,11 @@
        <column>
         <property name="text">
          <string>Тип сигнала</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Значение</string>
         </property>
        </column>
       </widget>

@@ -28,9 +28,6 @@ void TableForIed::on_tableWidgetSpi_cellDoubleClicked(int row, int column)
 {
     // Необходимо условие, чтобы открывать таблицу модуля, только при нажатии на ячейку с Типом самого модуля, то есть только самая первая колонка
     if (column == 0) {
-        if (vectorTableSpiItem[row*5]->text().contains("DI") |
-            vectorTableSpiItem[row*5]->text().contains("DO") )
-            return;
         vectorTableForModuleSpi[row]->show();
         vectorTableForModuleSpi[row]->updateTable(vectorTableSpiItem[row*5]->text());
     }
@@ -43,9 +40,6 @@ void TableForIed::on_tableWidgetRs_cellDoubleClicked(int row, int column)
 {
     // Необходимо условие, чтобы открывать таблицу модуля, только при нажатии на ячейку с Типом самого модуля, то есть только самая первая колонка
     if (column == 0) {
-        if (vectorTableRsItem[row*5]->text().contains("DI") |
-            vectorTableRsItem[row*5]->text().contains("DO") )
-            return;
         vectorTableForModuleRs[row]->show();
         vectorTableForModuleRs[row]->updateTable(vectorTableRsItem[row*5]->text());
     }
