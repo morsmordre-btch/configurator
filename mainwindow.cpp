@@ -123,7 +123,6 @@ void MainWindow::slotExportXml(int itemCount) {
                "Попробуйте еще раз.",
                ERROR_MSG);
     }
-    qDebug() << "export XML for one shit \n";
 }
 
 /******************************************************
@@ -145,7 +144,6 @@ void MainWindow::slotExportXml() {
                "Попробуйте еще раз.",
                ERROR_MSG);
     }
-    qDebug() << "export XML for all shit \n";
 }
 
 /******************************************************
@@ -167,7 +165,6 @@ void MainWindow::slotImportXml(int itemCount) {
                "Попробуйте еще раз.",
                ERROR_MSG);
     }
-    qDebug() << "import XML for one shit \n";
 }
 
 /******************************************************
@@ -189,8 +186,6 @@ void MainWindow::slotImportXml() {
                "Попробуйте еще раз.",
                ERROR_MSG);
     }
-
-        qDebug() << "import XML for all shit \n";
 }
 
 bool MainWindow::exportXml(int itemCount) {
@@ -203,9 +198,8 @@ bool MainWindow::exportXml(int itemCount) {
         ssh.setLogin(graphicsItemVector[itemCount].get()->getLoginIed());
         ssh.setPassword(graphicsItemVector[itemCount].get()->getPasswordIed());
         ssh.setPort("3333");
-        ssh.exportFile(pathToXmlFile, "/mnt/hdd/k0nstable_fold/test/import/");
+        return ssh.exportFile(pathToXmlFile, "/mnt/hdd/k0nstable_fold/test/import/");
     }
-    return true;
 }
 
 bool MainWindow::importXml(int itemCount) {
@@ -218,14 +212,10 @@ bool MainWindow::importXml(int itemCount) {
         ssh.setLogin(graphicsItemVector[itemCount].get()->getLoginIed());
         ssh.setPassword(graphicsItemVector[itemCount].get()->getPasswordIed());
         ssh.setPort("3333");
-        ssh.importFile("/mnt/hdd/k0nstable_fold/test/export/export.xml", "./import/");
+        return ssh.importFile("/mnt/hdd/k0nstable_fold/test/export/export.xml", "./import/");
     }
-    return true;
+
 }
-
-//#IHaTe#ObNoXiOuS#BrAtS#
-
-
 
 /*****************************************************
 * Function Name: createMenuBar

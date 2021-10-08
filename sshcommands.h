@@ -3,8 +3,9 @@
 
 #include <QProcess>
 #include <QDebug>
+#include <memory>
 
-class SshCommands
+class SshCommands : public QObject
 {
 private:
     QString _login;
@@ -12,7 +13,9 @@ private:
     QString _ip;
     QString _port;
 
-    QProcess process;
+    std::unique_ptr<QProcess> process;
+
+private slots:
 
 public:
     SshCommands();
@@ -22,8 +25,8 @@ public:
     void setLogin(QString);
     void setPort(QString);
 
-    void exportFile(QString localPathToFile, QString remotePathToDir);
-    void importFile(QString localPathToDir, QString remotePathToFile);
+    bool exportFile(QString localPathToFile, QString remotePathToDir);
+    bool importFile(QString localPathToDir, QString remotePathToFile);
 };
 
 #endif // SSHCOMMANDS_H

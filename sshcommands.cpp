@@ -2,45 +2,66 @@
 
 SshCommands::SshCommands()
 {
+    process = std::make_unique<QProcess>();
+    process->setProcessChannelMode(QProcess::MergedChannels);
     _port = "22";
 }
 
 void SshCommands::setLogin(QString login) {
-    _login = login;
+    if (login == "")
+        _login = "root";
+    else
+        _login = login;
 }
 
 void SshCommands::setPassword(QString password) {
-    _password = password;
+    if (password == "")
+        _password = "0000";
+    else
+        _password = password;
 }
 
 void SshCommands::setIp(QString ip) {
-    _ip = ip;
+    if (ip == "")
+        _ip = "192.168.1.1";
+    else
+        _ip = ip;
 }
 
 void SshCommands::setPort(QString port) {
     _port = port;
 }
 
-void SshCommands::exportFile(QString localPathToFile, QString remotePathToDir) {
+bool SshCommands::exportFile(QString localPathToFile, QString remotePathToDir) {
     QString commandExport;
     commandExport = "sshpass -p "+_password+
                     " scp -P "+_port+" "+localPathToFile+" "+
                     _login+"@"+_ip+":"+remotePathToDir;
+    process->start(commandExport);
     qDebug() << commandExport;
-    process.start(commandExport);
-    if( !process.waitForStarted() || !process.waitForFinished() ) {
-            return;
-    }
+    if(process->waitForStarted(2000) & process->waitForFinished(5000) )
+        if (process->readAll() == "")
+            return true;
+        else
+            return false;
+    else
+        return false;
 }
-void SshCommands::importFile(QString remotePathToFile, QString localPathToDir) {
+
+bool SshCommands::importFile(QString remotePathToFile, QString localPathToDir) {
     QString commandImport;
     commandImport = "sshpass -p "+_password+
                     " scp -P "+_port+" "+_login+"@"+_ip+":"+remotePathToFile+
                     " "+localPathToDir;
+    process->start(commandImport);
     qDebug() << commandImport;
-    process.start(commandImport);
-    if( !process.waitForStarted() || !process.waitForFinished() ) {
-            return;
+    if(process->waitForStarted(2000) & process->waitForFinished(5000) ) {
+        if (process->readAll() == "")
+            return true;
+        else
+            return false;
+    }
+    else {
+        return false;
     }
 }
-

@@ -5,13 +5,14 @@ int GraphicsItem::itemsCounter = 0;
 
 GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGroup ()
 {
-    initFont();
+
     itemCount = itemsCounter;
     itemsCounter++;
 
-
+    initFont();
     // в название элемента добавляем его порядковый номер
-    text->setText(QString("КП").append(QString::number(itemCount)));
+    _nameIed = "КП" + QString::number(itemCount);
+    text->setText(_nameIed);
     // располагаем графический объект в случайном месте
     initPosItem(QPointF(std::rand()%100, std::rand()%100));
 
@@ -25,6 +26,7 @@ GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGrou
     // Создаем окно для настроек
 
     settingItem = std::make_unique<SettingItem>();
+    settingItem->setNameIed(_nameIed);
 
     connect(
             settingItem.get(),
@@ -114,7 +116,6 @@ void GraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void GraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-
     Q_UNUSED(event);
 }
 
@@ -142,12 +143,10 @@ void GraphicsItem::slotSetting() {
 
 void GraphicsItem::slotExportXml() {
     emit signalExportXml(itemCount);
-    //qDebug() << "export XML-file \n";
 }
 
 void GraphicsItem::slotImportXml() {
     emit signalImportXml(itemCount);
-    //qDebug() << "import XML-file \n";
 }
 
 void GraphicsItem::slotDiagnostic() {

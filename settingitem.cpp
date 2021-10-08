@@ -9,10 +9,6 @@ SettingItem::SettingItem(QWidget *parent) :
 
     // Устанавливаем название окна
     this->setWindowTitle(QString("Настройки"));
-
-
-
-
 }
 
 SettingItem::~SettingItem()
@@ -45,4 +41,8 @@ QString SettingItem::getLoginIed() {
 
 QString SettingItem::getPasswordIed(){
     return ui->passwordIed->text();
+}
+
+void SettingItem::setNameIed(QString nameIed) {
+    ui->nameIed->setText(nameIed);
 }

@@ -21,7 +21,7 @@ public:
     QString getLoginIed();
     QString getPasswordIed();
 
-
+    void setNameIed(QString nameIed);
 
 private slots:
     void on_buttonBox_accepted();
