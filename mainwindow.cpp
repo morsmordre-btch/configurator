@@ -19,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
     scene->setSceneRect(0,0,5000,5000);
 
-
     dir.mkdir("export");
     dir.mkdir("import");
     nameXmlFile = "control_config.xml";
@@ -33,35 +32,35 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    // Создаем вектор указателей на контекстное меню, который потом передаем в объект GraphicsItem
-    std::shared_ptr<QMenu> contextMenu = std::make_shared<QMenu>();
+    // Создаем вектор указателей на контекстное меню, который потом передаем в объект GraphicsController
+    //std::shared_ptr<QMenu> contextMenu = std::make_shared<QMenu>();
     // Новый созданный объект помещаем в вектор, чтобы можно было удалять их и тд
-    graphicsItemVector.push_back(std::make_unique<GraphicsItem>());
-    connect(
-            graphicsItemVector[GraphicsItem::itemsCounter-1].get(),
-            &GraphicsItem::signalDel,
+    graphicsItemVector.push_back(std::make_unique<GraphicsController>());
+
+    connect(graphicsItemVector.back().get(),
+            //graphicsItemVector.[GraphicsController::itemsCounter-1].get(),
+            &GraphicsController::signalDel,
             this,
             &MainWindow::slotDeleteFromVector
     );
-    connect(
-            graphicsItemVector[GraphicsItem::itemsCounter-1].get(),
-            static_cast<void(GraphicsItem::*)(int)>(&GraphicsItem::signalExportXml),
+    connect(graphicsItemVector.back().get(),
+            //graphicsItemVector[GraphicsController::itemsCounter-1].get(),
+            static_cast<void(GraphicsController::*)(int)>(&GraphicsController::signalExportXml),
             this,
             static_cast<void(MainWindow::*)(int)>(&MainWindow::slotExportXml)
     );
-    connect(
-            graphicsItemVector[GraphicsItem::itemsCounter-1].get(),
-            static_cast<void(GraphicsItem::*)(int)>(&GraphicsItem::signalImportXml),
+    connect(graphicsItemVector.back().get(),
+            //graphicsItemVector[GraphicsController::itemsCounter-1].get(),
+            static_cast<void(GraphicsController::*)(int)>(&GraphicsController::signalImportXml),
             this,
             static_cast<void(MainWindow::*)(int)>(&MainWindow::slotImportXml)
     );
-    scene->addItem(graphicsItemVector[GraphicsItem::itemsCounter-1].get());
-
+    scene->addItem(graphicsItemVector.back().get());
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    if (GraphicsItem::itemsCounter == 0) {
+    if (GraphicsController::itemsCounter == 0) {
         MsgBox("Нет графических элементов для удаления.",
                "",
                WARNING_MSG);
@@ -74,7 +73,14 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::slotDeleteFromVector(int itemCount)
 {
-    graphicsItemVector.erase(graphicsItemVector.begin() + itemCount - 1);
+    scene->removeItem(graphicsItemVector.at(itemCount).get());
+    graphicsItemVector.erase(graphicsItemVector.begin() + itemCount);
+
+    // Перенумерация КП
+    for(std::size_t i = 0; i < graphicsItemVector.size(); i++)
+    {
+        graphicsItemVector.at(i)->setItemIndex(i);
+    }
 }
 
 QToolBar *MainWindow::createToolBar() {
@@ -88,14 +94,18 @@ QToolBar *MainWindow::createToolBar() {
 }
 
 void MainWindow::slotParsingXml() {
-    if (GraphicsItem::itemsCounter == 0) {
+    if (GraphicsController::itemsCounter == 0) {
         MsgBox("Добавьте контроллер для записи данных XML-файла.",
                "",
                WARNING_MSG);
         return;
     } else
-        for (int i = 0; i < GraphicsItem::itemsCounter; i++)
+        for (int i = 0; i < GraphicsController::itemsCounter; i++) {
+            scene_ = scene;
             XmlParser parser(graphicsItemVector[i].get(), pathToXmlFile);
+
+            //parser.scene_->addItem(graphicsItemVector[GraphicsController::itemsCounter-1]->graphicsModuleVector[0].get());
+        }
     qDebug() << "parsing XML shit \n";
 }
 
@@ -194,9 +204,9 @@ bool MainWindow::exportXml(int itemCount) {
     }
     else {
         SshCommands ssh;
-        ssh.setIp(graphicsItemVector[itemCount].get()->getIpIed());
-        ssh.setLogin(graphicsItemVector[itemCount].get()->getLoginIed());
-        ssh.setPassword(graphicsItemVector[itemCount].get()->getPasswordIed());
+        ssh.setIp(graphicsItemVector[itemCount].get()->getIp());
+        ssh.setLogin(graphicsItemVector[itemCount].get()->getLogin());
+        ssh.setPassword(graphicsItemVector[itemCount].get()->getPassword());
         ssh.setPort("3333");
         return ssh.exportFile(pathToXmlFile, "/mnt/hdd/k0nstable_fold/test/import/");
     }
@@ -208,9 +218,9 @@ bool MainWindow::importXml(int itemCount) {
     }
     else {
         SshCommands ssh;
-        ssh.setIp(graphicsItemVector[itemCount].get()->getIpIed());
-        ssh.setLogin(graphicsItemVector[itemCount].get()->getLoginIed());
-        ssh.setPassword(graphicsItemVector[itemCount].get()->getPasswordIed());
+        ssh.setIp(graphicsItemVector[itemCount].get()->getIp());
+        ssh.setLogin(graphicsItemVector[itemCount].get()->getLogin());
+        ssh.setPassword(graphicsItemVector[itemCount].get()->getPassword());
         ssh.setPort("3333");
         return ssh.importFile("/mnt/hdd/k0nstable_fold/test/export/export.xml", "./import/");
     }

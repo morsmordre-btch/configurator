@@ -1,6 +1,8 @@
 #include "xmlparser.h"
 
-XmlParser::XmlParser(GraphicsItem *item, QString nameXmlFile)
+QGraphicsScene *scene_;
+
+XmlParser::XmlParser(GraphicsController *item, QString nameXmlFile)
 {
     xmlFile = std::make_unique<QFile>(nameXmlFile);
     if (!xmlFile->open(QIODevice::ReadOnly)) {
@@ -72,9 +74,9 @@ void XmlParser::parsingModulesList(QString ip) {
     }
 }
 
-void XmlParser::insertToTable(GraphicsItem *item) {
+void XmlParser::insertToTable(GraphicsController *item) {
     std::map <QString, int>::iterator it;
-    QString ip = item->getIpIed();//"192.168.0.0.1";//item->getIpIed();
+    QString ip = item->getIp();//"192.168.0.0.1";//item->getIp();
     int numberModule;                   // Количество модулей в объекте
     it = mapIpModulesNum.find(ip);
     if (it == mapIpModulesNum.end()) {
@@ -87,8 +89,14 @@ void XmlParser::insertToTable(GraphicsItem *item) {
     numberModule = it->second;
     int tableItemCountSpi = 0;
     int tableItemCountRs = 0;
+    int countSpi = 0;
+    int countRs = 0;
     for (int i = 0; i < numberModule; i++) {
         if (interfaceNum.find(i)->second == "SPI") {
+            countSpi++;
+            item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x(), item->y()+15+countSpi*20));
+            scene_->addItem(item->graphicsModuleVector[i].get());
+            item->graphicsModuleVector[0].get();
             item->table->insertRowsForSpi();
             item->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
             item->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
@@ -105,6 +113,9 @@ void XmlParser::insertToTable(GraphicsItem *item) {
                         findContent(ip,i, "Speed"));
         }
         else if (interfaceNum.find(i)->second == "RS-485") {
+            countRs++;
+            item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x()+50, item->y()+15+countRs*20));
+            scene_->addItem(item->graphicsModuleVector[i].get());
             item->table->insertRowsForRs();
             item->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
             item->table->vectorTableRsItem[tableItemCountRs++]->setText(

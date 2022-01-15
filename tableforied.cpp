@@ -17,18 +17,16 @@ TableForIed::TableForIed(int itemCount, QWidget *parent) :
     // Скрываем вертикальный заголовок
     ui->tableWidgetSpi->verticalHeader()->setVisible(false);
     ui->tableWidgetRs->verticalHeader()->setVisible(false);
-
-
-
-
-
-
-
 }
 
 TableForIed::~TableForIed()
 {
     delete ui;
+}
+
+void TableForIed::setIndex(int new_index)
+{
+    this->setWindowTitle(QString("Таблица КП") + QString::number(new_index));
 }
 
 void TableForIed::on_tableWidgetSpi_cellDoubleClicked(int row, int column)

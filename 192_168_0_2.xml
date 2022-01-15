@@ -1,0 +1,16 @@
+<modulesList ip="192.168.0.2"> 
+    <module interface="SPI">
+        <type>DI-8</type>
+        <slaveId>55</slaveId>
+        <serialNum>25600</serialNum>
+        <freq>1000</freq>
+        <speed>9600</speed>
+    </module>
+    <module interface="RS-485">
+        <type>DO-8</type>
+        <slaveId>56</slaveId>
+        <serialNum>26600</serialNum>
+        <freq>1000</freq>
+        <speed>4800</speed>
+    </module>
+</modulesList>

@@ -18,6 +18,8 @@ public:
     explicit TableForIed(int itemCount, QWidget *parent = nullptr);
     ~TableForIed();
 
+    void setIndex(int);
+
     // Метод добавления строк в таблицу
 
     void insertRowsForSpi();

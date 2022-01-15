@@ -1,18 +1,23 @@
 #ifndef XMLPARSER_H
 #define XMLPARSER_H
 
-#include <graphicsitem.h>
+#include <graphicscontroller.h>
 
 #include <map>
 
 #include <QXmlStreamReader>
 #include <QFile>
 
+#include <QGraphicsScene>
+
+
+
+
+
 class XmlParser
 {
 public:
-    XmlParser(GraphicsItem *item, QString nameXmlFile);
-
+    XmlParser(GraphicsController *item, QString nameXmlFile);
 
     std::unique_ptr<QFile> xmlFile;
     std::unique_ptr<QXmlStreamReader> xml;
@@ -25,7 +30,7 @@ public:
 
 private:
     void parsingModulesList(QString ip);
-    void insertToTable(GraphicsItem *item);
+    void insertToTable(GraphicsController *item);
     QString findContent(QString keyIp, int keyNum, QString keyType);
 };
 

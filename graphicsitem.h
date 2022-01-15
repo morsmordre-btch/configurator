@@ -20,41 +20,30 @@ class GraphicsItem : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 
-private:
-    QString _nameIed;
-    QString _ipIed;
-    QString _macIed;
-    QString _loginIed;
-    QString _passwordIed;
+protected:
+    QString _name;
 
     std::unique_ptr<SettingItem> settingItem;
 
     QMenu *contextMenu;
-
 public:
-    QGraphicsRectItem *rectangle = new QGraphicsRectItem();
-    QGraphicsSimpleTextItem *text = new QGraphicsSimpleTextItem(rectangle);
+    GraphicsItem(QObject *parent = nullptr);
+    ~GraphicsItem();
+
+    std::unique_ptr<QGraphicsRectItem> rectangle = std::make_unique<QGraphicsRectItem>();
+    std::unique_ptr<QGraphicsSimpleTextItem> text = std::make_unique<QGraphicsSimpleTextItem>();
 
     QPainter *painter = new QPainter();
 
     QPointF mouseCoords;
-
-    static int itemsCounter;
-    int itemCount;
 
     std::unique_ptr<TableForIed> table;
 
 
     QRectF boundingRect() const;
 
-    GraphicsItem(QObject *parent = nullptr);
-    ~GraphicsItem();
+    QString getName();
 
-    QString getNameIed();
-    QString getIpIed();
-    QString getMacIed();
-    QString getLoginIed();
-    QString getPasswordIed();
 
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -64,18 +53,13 @@ public:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
-private:
-    void createContextMenu();
-    void initPosItem(QPointF coords);
+protected:
+    virtual void createContextMenu() = 0;
+    virtual void initPosItem(QPointF coords) = 0;
     void initFont();
 
-private slots:
-    void slotSetting();
-    void slotDel();
-    void slotExportXml();
-    void slotImportXml();
-    void slotDiagnostic();
-    void slotSettingItem();
+protected slots:
+    virtual void slotSettingItem() = 0;
 
 signals:
     void signalDel(int itemCount);

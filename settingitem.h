@@ -15,11 +15,11 @@ public:
     explicit SettingItem(QWidget *parent = nullptr);
     ~SettingItem();
 
-    QString getNameIed();
-    QString getIpIed();
-    QString getMacIed();
-    QString getLoginIed();
-    QString getPasswordIed();
+    QString getName();
+    QString getIp();
+    QString getMac();
+    QString getLogin();
+    QString getPassword();
 
     void setNameIed(QString nameIed);
 

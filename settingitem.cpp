@@ -23,23 +23,23 @@ void SettingItem::on_buttonBox_accepted()
 
 }
 
-QString SettingItem::getNameIed() {
+QString SettingItem::getName() {
     return ui->nameIed->text();
 }
 
-QString SettingItem::getIpIed() {
+QString SettingItem::getIp() {
     return ui->ipIed->text();
 }
 
-QString SettingItem::getMacIed() {
+QString SettingItem::getMac() {
     return ui->macIed->text();
 }
 
-QString SettingItem::getLoginIed() {
+QString SettingItem::getLogin() {
     return ui->loginIed->text();
 }
 
-QString SettingItem::getPasswordIed(){
+QString SettingItem::getPassword(){
     return ui->passwordIed->text();
 }
 

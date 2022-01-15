@@ -5,7 +5,7 @@
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <graphicsitem.h>
+#include <graphicscontroller.h>
 #include <tableforied.h>
 #include <vector>
 #include <memory>
@@ -20,10 +20,11 @@
 
 #define ALL_ITEM -1
 
-
 namespace Ui {
 class MainWindow;
 }
+
+extern QGraphicsScene *scene_;
 
 class MainWindow : public QMainWindow
 {
@@ -36,7 +37,7 @@ public:
     ~MainWindow();
 
     // Создаем вектор графических объектов
-    std::vector<std::unique_ptr<GraphicsItem>> graphicsItemVector;
+    std::vector<std::unique_ptr<GraphicsController>> graphicsItemVector;
 
 
 private slots:
