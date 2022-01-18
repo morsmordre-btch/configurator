@@ -76,6 +76,8 @@ private:
     QString pathToXmlFile;
     QString nameXmlFile;
 
+    QFont font;
+
     QToolBar *createToolBar();
     QMenuBar *createMenuBar();
     QMenu *createSubMenuBarFile();

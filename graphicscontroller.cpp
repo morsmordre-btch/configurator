@@ -93,14 +93,31 @@ void GraphicsController::setItemIndex(int new_index)
     settingItem->setNameIed(_name);
 }
 
+void GraphicsController::setFont(QFont &font)
+{
+    text->setFont(font);
+
+    rectangle->setRect(this->x(),
+                       this->y(),
+                       text->boundingRect().width() + 60,
+                       text->boundingRect().height() + 40);
+
+    text->setPos(rectangle->rect().center().x()-text->boundingRect().width()/2,
+                 rectangle->rect().center().y()-text->boundingRect().height()/2);
+}
+
 // Метод для инициализации связи координат прямоугольника и текста в нем с нашим объектом
 void GraphicsController::initPosItem(QPointF coords)
 {
     // Задаем начальные координаты нашего объекта (ItemGroup)
     this->setPos(coords);
     // Задаем параметры прямоугольника, связываем координаты прямоугольника с нашим объектом
-    rectangle->setRect(this->x(),this->y(),100,50);
+    rectangle->setRect(this->x(),
+                       this->y(),
+                       text->boundingRect().width() + 60,
+                       text->boundingRect().height() + 40);
     // Располагаем текст по центру прямоугольника
+
     text->setPos(rectangle->rect().center().x()-text->boundingRect().width()/2,
                  rectangle->rect().center().y()-text->boundingRect().height()/2);
 

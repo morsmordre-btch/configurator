@@ -1,5 +1,7 @@
 #include "graphicsmodule.h"
 
+QRectF GraphicsModule::maxRect = {0, 0, 0, 0};
+
 GraphicsModule::GraphicsModule(QString name, int x, int y) : GraphicsItem() {
     // в название элемента добавляем его порядковый номер
     _name = name;
@@ -8,15 +10,15 @@ GraphicsModule::GraphicsModule(QString name, int x, int y) : GraphicsItem() {
 
 //    addToGroup(text.get());
 //    addToGroup(rectangle.get());
-    text.get()->setParentItem(this);
-    rectangle.get()->setParentItem(this);
+    text->setParentItem(this);
+    rectangle->setParentItem(this);
     // Создаем окно для таблицы
 
     // располагаем графический объект в случайном месте
     initPosItem(QPointF(x, y));
 
 
-    table = std::make_unique<TableForIed>(0);
+    table = std::make_unique<TableForModule>();
 
     // Создаем окно для настроек
 
@@ -43,23 +45,68 @@ GraphicsModule::~GraphicsModule()
 //    removeFromGroup(rectangle.get());
 }
 
+void GraphicsModule::setFont(QFont &font)
+{
+    text->setFont(font);
+
+    updateSize();
+}
+
 void GraphicsModule::initPosItem(QPointF coords)
 {
     // Задаем начальные координаты нашего объекта (ItemGroup)
     this->setPos(coords);
     // Задаем параметры прямоугольника, связываем координаты прямоугольника с нашим объектом
-    rectangle->setRect(this->x(),this->y(),50,25);
-    // Располагаем текст по центру прямоугольника
-    text->setPos(rectangle->rect().center().x()-text->boundingRect().width()/2,
-                 rectangle->rect().center().y()-text->boundingRect().height()/2);
 
+    updateSize();
 }
 
-void GraphicsModule::createContextMenu() {
-    contextMenu = new QMenu();
+void GraphicsModule::updateSize()
+{
+    rectangle->setRect(this->x(),
+                       this->y(),
+                       text->boundingRect().width() + 10,
+                       text->boundingRect().height() + 10);
 
-    contextMenu->addAction("Настроить по XML-файлу", this, SLOT(slotExportXml()));
-    contextMenu->addAction("Настройка", this, SLOT(slotSetting()));
+    if(rectangle->rect().width() > maxRect.width())
+    {
+        maxRect.setWidth(rectangle->rect().width());
+    }
+    else
+    {
+        //rectangle->rect().setWidth(maxRect.width());
+
+        rectangle->setRect(this->x(),
+                           this->y(),
+                           maxRect.width(),
+                           rectangle->rect().height());
+    }
+    if(rectangle->rect().height() > maxRect.height())
+    {
+        maxRect.setHeight(rectangle->rect().height());
+    }
+    else
+    {
+        rectangle->rect().setHeight(maxRect.height());
+
+        rectangle->setRect(this->x(),
+                           this->y(),
+                           rectangle->rect().width(),
+                           maxRect.height());
+    }
+
+    // Располагаем текст по центру прямоугольника
+
+    text->setPos(rectangle->rect().center().x() - text->boundingRect().width()/2,
+                 rectangle->rect().center().y() - text->boundingRect().height()/2);
+}
+
+
+void GraphicsModule::createContextMenu() {
+    //contextMenu = new QMenu();
+
+    //contextMenu->addAction("Настроить по XML-файлу", this, SLOT(slotExportXml()));
+    //contextMenu->addAction("Настройка", this, SLOT(slotSetting()));
 }
 
 void GraphicsModule::slotSettingItem() {

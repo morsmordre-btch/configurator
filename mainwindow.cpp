@@ -23,6 +23,26 @@ MainWindow::MainWindow(QWidget *parent) :
     dir.mkdir("import");
     nameXmlFile = "control_config.xml";
     pathToXmlFile = "./export/" + nameXmlFile;
+
+    // Устанавливаем шрифт текста
+    //QFont font;
+    int id = QFontDatabase::addApplicationFont("/home/isault/.fonts/GOST/GOST2304_TypeB.ttf"); // TODO
+    QStringList GOST_TypeB = QFontDatabase::applicationFontFamilies(id);
+    // Если GOST Type B недоступен, то по-умолчанию Arial
+    if (id == -1)
+    {
+        font.setFamily("Arial");
+        font.setPointSize(14);
+        font.setWeight(QFont::Normal);
+        font.setItalic(true);
+    }
+    else
+    {
+        font.setFamily(GOST_TypeB.at(0));
+        font.setPointSize(16);
+        font.setWeight(QFont::Normal);
+        font.setItalic(true);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +56,7 @@ void MainWindow::on_pushButton_clicked()
     //std::shared_ptr<QMenu> contextMenu = std::make_shared<QMenu>();
     // Новый созданный объект помещаем в вектор, чтобы можно было удалять их и тд
     systemVector.push_back(std::make_unique<SystemGroup>());
+    systemVector.back()->setFont(font);
 
     //controllerVector.push_back(std::make_unique<GraphicsController>());
 

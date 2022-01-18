@@ -2,7 +2,7 @@
 
 GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItem ()
 {
-    initFont();
+    //initFont();
     // Создание контекстного меню для объекта
     //createContextMenu();
     contextMenu = nullptr;
@@ -23,10 +23,10 @@ QRectF GraphicsItem::boundingRect() const
     return childrenBoundingRect();
 }
 
-void GraphicsItem::initFont()
+void GraphicsItem::setFont(QFont& font)
 {
     // Устанавливаем шрифт текста
-    QFont font;
+   /* QFont font;
     int id = QFontDatabase::addApplicationFont("/home/morsmordre/.fonts/GOST2304_TypeB.ttf"); // TODO
     QStringList GOST_TypeB = QFontDatabase::applicationFontFamilies(id);
     // Если GOST Type B недоступен, то по-умолчанию Arial
@@ -43,8 +43,17 @@ void GraphicsItem::initFont()
         font.setPointSize(18);
         font.setWeight(QFont::Normal);
         font.setItalic(true);
-    }
+    }*/
     text->setFont(font);
+
+    /*rectangle->setRect(this->x(),
+                       this->y(),
+                       text->boundingRect().width() + 20,
+                       text->boundingRect().height() + 20);
+    // Располагаем текст по центру прямоугольника
+
+    text->setPos(rectangle->rect().center().x()-text->boundingRect().width()/2,
+                 rectangle->rect().center().y()-text->boundingRect().height()/2);*/
 }
 
 void GraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -67,7 +76,7 @@ void GraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void GraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-    table->show();
+    //table->show();
     Q_UNUSED(event);
 }
 

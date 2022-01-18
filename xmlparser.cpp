@@ -105,15 +105,64 @@ void XmlParser::insertToTable(SystemGroup *item) {
     int tableItemCountRs = 0;
     int countSpi = 0;
     int countRs = 0;
+
+    auto convertModuleTypeToStr = [](int mtype) -> QString
+    {
+        QString moduleName;
+
+        if(mtype < 100) // модуль интерфейсов
+        {
+            moduleName = "IM_rev." + QString("%1").arg(mtype,
+                                                       2,
+                                                       10,
+                                                       QChar('0'));
+        }
+        else if(mtype < 200)
+        {
+            moduleName = "DI-16_rev." + QString("%1").arg(mtype - 100,
+                                                          2,
+                                                          10,
+                                                          QChar('0'));
+        }
+        else if(mtype < 300)
+        {
+            moduleName = "DO-16_rev." + QString("%1").arg(mtype - 200,
+                                                          2,
+                                                          10,
+                                                          QChar('0'));
+        }
+        else if(mtype < 400)
+        {
+            moduleName = "AI-8_rev." + QString("%1").arg(mtype - 300,
+                                                         2,
+                                                         10,
+                                                         QChar('0'));
+        }
+        else if(mtype < 500)
+        {
+            moduleName = "AO-8_rev." + QString("%1").arg(mtype - 400,
+                                                         2,
+                                                         10,
+                                                         QChar('0'));
+        }
+        else
+        {
+            moduleName = "??";
+        }
+
+        return moduleName;
+    };
+
     for (int i = 0; i < numberModule; i++) {
         if (interfaceNum.find(i)->second == "SPI") {
             countSpi++;
 
-            auto module_ptr = item->addModule(findContent(ip,i, "MType"), ModuleInterface::SPI);
+            QString moduleName;
+            auto mtype = findContent(ip,i, "MType").toInt();
 
-            //item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x(), item->y()+15+countSpi*20));
-            //scene_->addItem(item->graphicsModuleVector[i].get());
-            //item->graphicsModuleVector[0].get();
+            moduleName = convertModuleTypeToStr(mtype);
+
+            auto module_ptr = item->addModule(moduleName, {ModuleInterface::SPI});
 
             item->cntrl->table->insertRowsForSpi();
             item->cntrl->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
@@ -133,14 +182,19 @@ void XmlParser::insertToTable(SystemGroup *item) {
             item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
                         findContent(ip,i, "Speed"));
 
+            module_ptr->table->updateTable(moduleName);
+
         }
         else if (interfaceNum.find(i)->second == "RS-485") {
             countRs++;
 
-            auto module_ptr = item->addModule(findContent(ip,i, "MType"), ModuleInterface::RS_485);
+            QString moduleName;
+            auto mtype = findContent(ip,i, "MType").toInt();
 
-            //item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x()+50, item->y()+15+countRs*20));
-            //scene_->addItem(item->graphicsModuleVector[i].get());
+            moduleName = convertModuleTypeToStr(mtype);
+
+            auto module_ptr = item->addModule(moduleName, {ModuleInterface::RS_485});
+
             item->cntrl->table->insertRowsForRs();
             item->cntrl->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
             item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
@@ -158,6 +212,8 @@ void XmlParser::insertToTable(SystemGroup *item) {
                         findContent(ip,i, "Freq"));
             item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
                         findContent(ip,i, "Speed"));
+
+            module_ptr->table->updateTable(moduleName);
         }
     }
 }

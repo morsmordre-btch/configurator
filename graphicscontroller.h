@@ -26,7 +26,10 @@ public:
     static int itemsCounter;
     int itemCount;
 
+    std::unique_ptr<TableForIed> table;
+
     void setItemIndex(int); // Задать itemCount объекта
+    void setFont(QFont &);
 
     QString getIp();
     QString getMac();

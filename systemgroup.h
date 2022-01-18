@@ -11,8 +11,6 @@
 #include "graphicsmodule.h"
 #include "graphicscontroller.h"
 
-enum class ModuleInterface {SPI, RS_485};
-
 class SystemGroup : public QObject, public QGraphicsItem
 {
     Q_OBJECT
@@ -50,6 +48,12 @@ public:
         return nullptr; // be careful NOTABUG WONTFIX
     }
 
+    void setFont(QFont font)
+    {
+        this->font = font;
+        cntrl->setFont(font);
+    }
+
     QPainter *painter = new QPainter();
 
     std::vector<std::unique_ptr<GraphicsModule>> graphicsModuleVector;
@@ -58,6 +62,10 @@ private:
     QPointF mouseCoords;
     bool noSPI = true;
     bool noRS485 = true;
+    QFont font;
+
+    std::unique_ptr<QGraphicsSimpleTextItem> textRS;
+    std::unique_ptr<QGraphicsSimpleTextItem> textSPI;
 
     QGraphicsLineItem *lineRS1;
     QGraphicsLineItem *lineRS2;

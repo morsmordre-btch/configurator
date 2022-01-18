@@ -3,11 +3,15 @@
 
 #include <graphicsitem.h>
 
+enum class ModuleInterface {UNDEFINED, SPI, RS_485};
+
 class GraphicsModule : public GraphicsItem
 {
 public:
     GraphicsModule(QString name, int x, int y);
     ~GraphicsModule();
+
+    void setFont(QFont &);
 
     void createContextMenu();
 
@@ -19,8 +23,15 @@ public:
 
     void setSerial(uint32_t new_serial) {serial = new_serial;}
     uint32_t getSerial(void) {return serial;}
+    void updateSize();
+
+    std::unique_ptr<TableForModule> table;
+
+    static QRectF maxRect;
+    ModuleInterface moduleInterface = ModuleInterface::UNDEFINED;
 private:
     uint32_t serial;
+
 
     void initPosItem(QPointF coords);
 

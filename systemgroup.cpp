@@ -4,8 +4,12 @@ SystemGroup::SystemGroup(QObject *parent) : QObject(parent), QGraphicsItem()
 {
     cntrl = std::make_unique<GraphicsController>();
 
+    cntrl->setFont(font);
     cntrl->setParentItem(this);
     cntrl->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
+
+    textRS = std::make_unique<QGraphicsSimpleTextItem>("RS-485");
+    textSPI = std::make_unique<QGraphicsSimpleTextItem>("SPI");
 
     setFlag(QGraphicsItem::ItemHasNoContents, true);
     setFiltersChildEvents(false);
@@ -47,8 +51,10 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
                                                                     0,
                                                                     0));
 
+    graphicsModuleVector.back()->setFont(font);
     graphicsModuleVector.back()->setFlag(QGraphicsItem::ItemStacksBehindParent, true);
     graphicsModuleVector.back()->setParentItem(this);
+    graphicsModuleVector.back()->moduleInterface = interface;
 
     if(interface == ModuleInterface::RS_485) // По стрелкам справа
     {
@@ -60,13 +66,13 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
             auto rect = cntrl->boundingRect();
 
             rect = mapRectFromItem(cntrl.get(), rect);
-            //test
-            auto textRS = new QGraphicsSimpleTextItem {"RS-485", this};
 
+            textRS->setParentItem(this);
+            textRS->setFont(font);
 
             QLineF line1Coords{rect.x() + rect.width(),
                         rect.y() + rect.height()/2,
-                        rect.x() + rect.width() + 60,
+                        rect.x() + rect.width() + 20 + textRS->boundingRect().width(),
                         rect.y() + rect.height()/2};
 
             lineRS1 = new QGraphicsLineItem;
@@ -79,13 +85,17 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
                             rect.y() + rect.height()/2}, this};
 */
             //QLineF line1Coords{line1.line()};
-            rect = mapRectFromItem(textRS, textRS->boundingRect());
+            rect = mapRectFromItem(textRS.get(), textRS->boundingRect());
 
             textRS->setPos({(line1Coords.x1() + line1Coords.x2())/2 - rect.width()/2,
                            line1Coords.y1() - rect.height() - 5});
 
-            QLineF line2Coords{line1Coords.x2(), line1Coords.y2(),
-                        line1Coords.x2(), line1Coords.y2() + 50};
+            QLineF line2Coords{line1Coords.x2(),
+                        line1Coords.y2(),
+                        line1Coords.x2(),
+                        line1Coords.y2() + 20
+                        + graphicsModuleVector.back()->boundingRect().height()
+                        + cntrl->boundingRect().height()/2};
 
             lineRS2 = new QGraphicsLineItem;
             lineRS2->setParentItem(this);
@@ -103,7 +113,8 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
         else
         {
             QLineF line2Coords{lineRS2->line()};
-            line2Coords.setLength(line2Coords.length() + 50);
+            line2Coords.setLength(line2Coords.length() + 20
+                                  + graphicsModuleVector.back()->boundingRect().height());
             lineRS2->setLine(line2Coords);
 
             line3Coords = {line2Coords.x2(), line2Coords.y2(),
@@ -128,12 +139,14 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
 
             rect = mapRectFromItem(cntrl.get(), rect);
             //test
-            auto textSPI = new QGraphicsSimpleTextItem {"SPI", this};
 
+            textSPI->setFont(font);
+            textRS->setFont(font);
+            textSPI->setParentItem(this);
 
             QLineF line1Coords{rect.x(),
                         rect.y() + rect.height()/2,
-                        rect.x() - 60,
+                        rect.x() - 20 - textRS->boundingRect().width(),
                         rect.y() + rect.height()/2};
 
             lineSPI1 = new QGraphicsLineItem;
@@ -146,13 +159,17 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
                             rect.y() + rect.height()/2}, this};
 */
             //QLineF line1Coords{line1.line()};
-            rect = mapRectFromItem(textSPI, textSPI->boundingRect());
+            rect = mapRectFromItem(textSPI.get(), textSPI->boundingRect());
 
             textSPI->setPos({(line1Coords.x1() + line1Coords.x2())/2 - rect.width()/2,
                            line1Coords.y2() - rect.height() - 5});
 
-            QLineF line2Coords{line1Coords.x2(), line1Coords.y2(),
-                        line1Coords.x2(), line1Coords.y2() + 50};
+            QLineF line2Coords{line1Coords.x2(),
+                        line1Coords.y2(),
+                        line1Coords.x2(),
+                        line1Coords.y2() + 20
+                        + graphicsModuleVector.back()->boundingRect().height()
+                        + cntrl->boundingRect().height()/2};
 
             lineSPI2 = new QGraphicsLineItem;
             lineSPI2->setParentItem(this);
@@ -171,7 +188,8 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
         else
         {
             QLineF line2Coords{lineSPI2->line()};
-            line2Coords.setLength(line2Coords.length() + 50);
+            line2Coords.setLength(line2Coords.length() + 20
+                                  + graphicsModuleVector.back()->boundingRect().height());
             lineSPI2->setLine(line2Coords);
 
             line3Coords = {line2Coords.x2(), line2Coords.y2(),
@@ -185,6 +203,36 @@ GraphicsModule* SystemGroup::addModule(QString name, ModuleInterface interface)
             graphicsModuleVector.back()->setPos(line3Coords.x2(),
                                                 line3Coords.y2() - rect.height()/2);
         }
+    }
+
+    std::size_t cntr_rs = 0;
+    std::size_t cnrt_spi = 0;
+
+    for(auto& module : graphicsModuleVector)
+    {
+        module->updateSize();
+        if(module->moduleInterface == ModuleInterface::RS_485)
+        {
+            const auto line = rsLines.at(cntr_rs++)->line();
+            const QPointF end = {line.x2(), line.y2()};
+            const auto rect = mapRectFromItem(module.get(), module->boundingRect());
+
+            const QPointF pnt{end.x(), end.y() - rect.height()/2};
+
+            module->setPos(mapToItem(module.get(), pnt));
+        }
+        else
+        {
+            const auto line = spiLines.at(cnrt_spi++)->line();
+            //const auto end = mapFromItem(spiLines.at(cnrt_spi - 1).get(), line.x2(), line.y2());
+            const QPointF end = {line.x2(), line.y2()};
+            const auto rect = mapRectFromItem(module.get(), module->boundingRect());
+
+            const QPointF pnt{end.x(), end.y() - rect.height()/2};
+
+            module->setPos(mapToItem(module.get(), pnt));
+        }
+
     }
 
     return graphicsModuleVector.back().get();

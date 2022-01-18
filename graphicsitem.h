@@ -37,8 +37,6 @@ public:
 
     QPointF mouseCoords;
 
-    std::unique_ptr<TableForIed> table;
-
 
     QRectF boundingRect() const;
 
@@ -53,10 +51,10 @@ public:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
+    void setFont(QFont&);
 protected:
     virtual void createContextMenu() = 0;
     virtual void initPosItem(QPointF coords) = 0;
-    void initFont();
 
 protected slots:
     virtual void slotSettingItem() = 0;
