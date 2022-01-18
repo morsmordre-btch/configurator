@@ -11,7 +11,17 @@ public:
 
     void createContextMenu();
 
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
+    void setSerial(uint32_t new_serial) {serial = new_serial;}
+    uint32_t getSerial(void) {return serial;}
 private:
+    uint32_t serial;
+
     void initPosItem(QPointF coords);
 
 private slots:

@@ -2,7 +2,7 @@
 #define GRAPHICSCONTROLLER_H
 
 #include <graphicsitem.h>
-#include <graphicsmodule.h>
+//#include <graphicsmodule.h>
 
 class GraphicsController : public GraphicsItem
 {
@@ -21,7 +21,7 @@ public:
     void createContextMenu();
 
     // Создаем вектор графических модулей
-    std::vector<std::unique_ptr<GraphicsModule>> graphicsModuleVector;
+//    std::vector<std::unique_ptr<GraphicsModule>> graphicsModuleVector;
 
     static int itemsCounter;
     int itemCount;
@@ -33,6 +33,11 @@ public:
     QString getLogin();
     QString getPassword();
 
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 private:
     void initPosItem(QPointF coords);
 

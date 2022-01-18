@@ -17,6 +17,7 @@
 
 #include <QDir>
 
+#include "systemgroup.h"
 
 #define ALL_ITEM -1
 
@@ -37,8 +38,9 @@ public:
     ~MainWindow();
 
     // Создаем вектор графических объектов
-    std::vector<std::unique_ptr<GraphicsController>> graphicsItemVector;
-
+    //std::vector<std::unique_ptr<GraphicsController>> graphicsItemVector;
+    std::vector<std::unique_ptr<GraphicsController>> controllerVector;
+    std::vector<std::unique_ptr<SystemGroup>> systemVector;
 
 private slots:
     void on_pushButton_clicked();

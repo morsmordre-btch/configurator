@@ -5,9 +5,11 @@ GraphicsModule::GraphicsModule(QString name, int x, int y) : GraphicsItem() {
     _name = name;
     text->setText(_name);
 
-    addToGroup(text.get());
-    addToGroup(rectangle.get());
 
+//    addToGroup(text.get());
+//    addToGroup(rectangle.get());
+    text.get()->setParentItem(this);
+    rectangle.get()->setParentItem(this);
     // Создаем окно для таблицы
 
     // располагаем графический объект в случайном месте
@@ -28,12 +30,17 @@ GraphicsModule::GraphicsModule(QString name, int x, int y) : GraphicsItem() {
             &GraphicsModule::slotSettingItem
     );
     createContextMenu();
+
+    setHandlesChildEvents(true);
 }
 
 GraphicsModule::~GraphicsModule()
 {
-    removeFromGroup(text.get());
-    removeFromGroup(rectangle.get());
+    text.get()->setParentItem(nullptr);
+    rectangle.get()->setParentItem(nullptr);
+
+//    removeFromGroup(text.get());
+//    removeFromGroup(rectangle.get());
 }
 
 void GraphicsModule::initPosItem(QPointF coords)
@@ -59,4 +66,37 @@ void GraphicsModule::slotSettingItem() {
     _name = settingItem->getName();
 }
 
+void GraphicsModule::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    // Устанавливаем координаты объекта в новые координаты минус исходные координаты
+    // мыши для плавного перемещения объекта
+    event->ignore();
+    //this->setPos(mapToScene(event->pos()) - mouseCoords);
+}
 
+void GraphicsModule::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    // Запоминаем координаты мыши для плавного перемещения объекта
+    //event->ignore();
+    //mouseCoords = event->pos();
+}
+
+void GraphicsModule::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    //event->ignore();
+    Q_UNUSED(event);
+}
+
+void GraphicsModule::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    table->show();
+    Q_UNUSED(event);
+}
+
+void GraphicsModule::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    if(contextMenu != nullptr)
+        contextMenu->popup(event->screenPos());
+    else
+        qDebug() << "Попытка обратиться к несуществующему QMenu";
+}

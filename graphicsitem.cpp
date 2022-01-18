@@ -1,6 +1,6 @@
 #include "graphicsitem.h"
 
-GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItemGroup ()
+GraphicsItem::GraphicsItem(QObject *parent) : QObject(parent), QGraphicsItem ()
 {
     initFont();
     // Создание контекстного меню для объекта
@@ -20,7 +20,7 @@ GraphicsItem::~GraphicsItem()
 
 QRectF GraphicsItem::boundingRect() const
 {
-    return QRectF (0,0,100,50);
+    return childrenBoundingRect();
 }
 
 void GraphicsItem::initFont()

@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     dir.mkdir("export");
     dir.mkdir("import");
     nameXmlFile = "control_config.xml";
-    pathToXmlFile = "./export/"+nameXmlFile;
+    pathToXmlFile = "./export/" + nameXmlFile;
 }
 
 MainWindow::~MainWindow()
@@ -35,27 +35,54 @@ void MainWindow::on_pushButton_clicked()
     // Создаем вектор указателей на контекстное меню, который потом передаем в объект GraphicsController
     //std::shared_ptr<QMenu> contextMenu = std::make_shared<QMenu>();
     // Новый созданный объект помещаем в вектор, чтобы можно было удалять их и тд
-    graphicsItemVector.push_back(std::make_unique<GraphicsController>());
+    systemVector.push_back(std::make_unique<SystemGroup>());
 
-    connect(graphicsItemVector.back().get(),
+    //controllerVector.push_back(std::make_unique<GraphicsController>());
+
+    connect(systemVector.back()->cntrl.get(),
             //graphicsItemVector.[GraphicsController::itemsCounter-1].get(),
             &GraphicsController::signalDel,
             this,
             &MainWindow::slotDeleteFromVector
     );
-    connect(graphicsItemVector.back().get(),
+    connect(systemVector.back()->cntrl.get(),
             //graphicsItemVector[GraphicsController::itemsCounter-1].get(),
             static_cast<void(GraphicsController::*)(int)>(&GraphicsController::signalExportXml),
             this,
             static_cast<void(MainWindow::*)(int)>(&MainWindow::slotExportXml)
     );
-    connect(graphicsItemVector.back().get(),
+    connect(systemVector.back()->cntrl.get(),
             //graphicsItemVector[GraphicsController::itemsCounter-1].get(),
             static_cast<void(GraphicsController::*)(int)>(&GraphicsController::signalImportXml),
             this,
             static_cast<void(MainWindow::*)(int)>(&MainWindow::slotImportXml)
     );
-    scene->addItem(graphicsItemVector.back().get());
+
+//    systemVector.back()->addToGroup(controllerVector.back().get());
+//    controllerVector.back()->setPos({0, 0});
+//    // test
+//    controllerVector.back()->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-1",
+//                                                                    this->x() - 30,
+//                                                                    this->y() + 30));
+//    controllerVector.back()->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-2",
+//                                                                    this->x() - 30,
+//                                                                    this->y() + 30*2));
+//    controllerVector.back()->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-3",
+//                                                                    this->x() - 30,
+//                                                                    this->y() + 30*3));
+
+//    int i = 1;
+//    for(auto& module : controllerVector.back()->graphicsModuleVector)
+//    {
+//        systemVector.back()->addToGroup(module.get());
+
+//        module.get()->setParentItem(controllerVector.back().get());
+//        module.get()->setPos(QPointF(-30, +35*i));
+//        i++;
+//    }
+//    systemVector.back()->setHandlesChildEvents(false);
+
+    scene->addItem(systemVector.back().get());
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -65,21 +92,28 @@ void MainWindow::on_pushButton_2_clicked()
                "",
                WARNING_MSG);
         return;
-    } else
-        graphicsItemVector.pop_back();
+    }
+    else
+    {
+        scene->removeItem(systemVector.back().get());
+        systemVector.pop_back();
+        //controllerVector.pop_back();
+    }
 }
 
 /* Пофиксить нумерацию КП при удалении и последующим добавлением */
 
 void MainWindow::slotDeleteFromVector(int itemCount)
 {
-    scene->removeItem(graphicsItemVector.at(itemCount).get());
-    graphicsItemVector.erase(graphicsItemVector.begin() + itemCount);
+    scene->removeItem(systemVector.at(itemCount).get());
+
+    systemVector.erase(systemVector.begin() + itemCount);
+    //controllerVector.erase(controllerVector.begin() + itemCount);
 
     // Перенумерация КП
-    for(std::size_t i = 0; i < graphicsItemVector.size(); i++)
+    for(std::size_t i = 0; i < systemVector.size(); i++)
     {
-        graphicsItemVector.at(i)->setItemIndex(i);
+        systemVector.at(i)->setItemIndex(i);
     }
 }
 
@@ -94,18 +128,25 @@ QToolBar *MainWindow::createToolBar() {
 }
 
 void MainWindow::slotParsingXml() {
-    if (GraphicsController::itemsCounter == 0) {
+    if (GraphicsController::itemsCounter == 0)
+    {
         MsgBox("Добавьте контроллер для записи данных XML-файла.",
                "",
                WARNING_MSG);
         return;
-    } else
-        for (int i = 0; i < GraphicsController::itemsCounter; i++) {
-            scene_ = scene;
-            XmlParser parser(graphicsItemVector[i].get(), pathToXmlFile);
+    }
+    else
+    {
+
+
+        for (std::size_t i = 0; i < systemVector.size(); i++)
+        {
+            pathToXmlFile = "./export/" + systemVector.at(i)->cntrl->getIp().replace('.','_') + ".xml";
+            XmlParser parser(systemVector.at(i).get(), pathToXmlFile);
 
             //parser.scene_->addItem(graphicsItemVector[GraphicsController::itemsCounter-1]->graphicsModuleVector[0].get());
         }
+    }
     qDebug() << "parsing XML shit \n";
 }
 
@@ -204,9 +245,9 @@ bool MainWindow::exportXml(int itemCount) {
     }
     else {
         SshCommands ssh;
-        ssh.setIp(graphicsItemVector[itemCount].get()->getIp());
-        ssh.setLogin(graphicsItemVector[itemCount].get()->getLogin());
-        ssh.setPassword(graphicsItemVector[itemCount].get()->getPassword());
+        ssh.setIp(controllerVector[itemCount].get()->getIp());
+        ssh.setLogin(controllerVector[itemCount].get()->getLogin());
+        ssh.setPassword(controllerVector[itemCount].get()->getPassword());
         ssh.setPort("3333");
         return ssh.exportFile(pathToXmlFile, "/mnt/hdd/k0nstable_fold/test/import/");
     }
@@ -218,9 +259,9 @@ bool MainWindow::importXml(int itemCount) {
     }
     else {
         SshCommands ssh;
-        ssh.setIp(graphicsItemVector[itemCount].get()->getIp());
-        ssh.setLogin(graphicsItemVector[itemCount].get()->getLogin());
-        ssh.setPassword(graphicsItemVector[itemCount].get()->getPassword());
+        ssh.setIp(controllerVector[itemCount].get()->getIp());
+        ssh.setLogin(controllerVector[itemCount].get()->getLogin());
+        ssh.setPassword(controllerVector[itemCount].get()->getPassword());
         ssh.setPort("3333");
         return ssh.importFile("/mnt/hdd/k0nstable_fold/test/export/export.xml", "./import/");
     }

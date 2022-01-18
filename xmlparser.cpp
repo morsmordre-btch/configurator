@@ -2,13 +2,24 @@
 
 QGraphicsScene *scene_;
 
-XmlParser::XmlParser(GraphicsController *item, QString nameXmlFile)
+XmlParser::XmlParser()
+{
+
+}
+
+XmlParser::XmlParser(SystemGroup *item, QString nameXmlFile)
+{
+    parse(item, nameXmlFile);
+}
+
+bool XmlParser::parse(SystemGroup *item, QString nameXmlFile)
 {
     xmlFile = std::make_unique<QFile>(nameXmlFile);
     if (!xmlFile->open(QIODevice::ReadOnly)) {
         MsgBox("Не удалось открыть файл.",
                "Проверьте состояние файла.",
                WARNING_MSG);
+        return false;
     }
     xml = std::make_unique<QXmlStreamReader>(xmlFile.get());
 
@@ -25,6 +36,8 @@ XmlParser::XmlParser(GraphicsController *item, QString nameXmlFile)
     insertToTable(item);
 
     xmlFile->close();
+
+    return true;
 }
 
 void XmlParser::parsingModulesList(QString ip) {
@@ -74,13 +87,14 @@ void XmlParser::parsingModulesList(QString ip) {
     }
 }
 
-void XmlParser::insertToTable(GraphicsController *item) {
-    std::map <QString, int>::iterator it;
-    QString ip = item->getIp();//"192.168.0.0.1";//item->getIp();
+void XmlParser::insertToTable(SystemGroup *item) {
+    //std::map <QString, int>::iterator it;
+    QString ip = item->cntrl->getIp();//"192.168.0.1";//item->getIp();
     int numberModule;                   // Количество модулей в объекте
-    it = mapIpModulesNum.find(ip);
+
+    auto it = mapIpModulesNum.find(ip);
     if (it == mapIpModulesNum.end()) {
-        MsgBox("На поле нет контроллеров с IP адрессами из XML-файла.",
+        MsgBox("На поле нет контроллеров с IP адресами из XML-файла.",
                "Проверьте правильность IP адресса контроллеров в настройках.",
                WARNING_MSG);
         return;
@@ -94,46 +108,58 @@ void XmlParser::insertToTable(GraphicsController *item) {
     for (int i = 0; i < numberModule; i++) {
         if (interfaceNum.find(i)->second == "SPI") {
             countSpi++;
-            item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x(), item->y()+15+countSpi*20));
-            scene_->addItem(item->graphicsModuleVector[i].get());
-            item->graphicsModuleVector[0].get();
-            item->table->insertRowsForSpi();
-            item->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
-            item->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
+
+            auto module_ptr = item->addModule(findContent(ip,i, "MType"), ModuleInterface::SPI);
+
+            //item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x(), item->y()+15+countSpi*20));
+            //scene_->addItem(item->graphicsModuleVector[i].get());
+            //item->graphicsModuleVector[0].get();
+
+            item->cntrl->table->insertRowsForSpi();
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
                         findContent(ip,i, "MType"));
-            item->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
-            item->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
                         findContent(ip,i, "SlaveID"));
-            item->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
-            item->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
                         findContent(ip,i, "SN"));
-            item->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
+
+            module_ptr->setSerial(findContent(ip,i, "SN").toULong());
+
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
                         findContent(ip,i, "Freq"));
-            item->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
                         findContent(ip,i, "Speed"));
+
         }
         else if (interfaceNum.find(i)->second == "RS-485") {
             countRs++;
-            item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x()+50, item->y()+15+countRs*20));
-            scene_->addItem(item->graphicsModuleVector[i].get());
-            item->table->insertRowsForRs();
-            item->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
-            item->table->vectorTableRsItem[tableItemCountRs++]->setText(
+
+            auto module_ptr = item->addModule(findContent(ip,i, "MType"), ModuleInterface::RS_485);
+
+            //item->graphicsModuleVector.push_back(std::make_unique<GraphicsModule>(findContent(ip,i, "MType"), item->x()+50, item->y()+15+countRs*20));
+            //scene_->addItem(item->graphicsModuleVector[i].get());
+            item->cntrl->table->insertRowsForRs();
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
                         findContent(ip,i, "MType"));
-            item->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
-            item->table->vectorTableRsItem[tableItemCountRs++]->setText(
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
                         findContent(ip,i, "SlaveID"));
-            item->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
-            item->table->vectorTableRsItem[tableItemCountRs++]->setText(
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
                         findContent(ip,i, "SN"));
-            item->table->vectorTableRsItem[tableItemCountRs++]->setText(
+
+            module_ptr->setSerial(findContent(ip,i, "SN").toULong());
+
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
                         findContent(ip,i, "Freq"));
-            item->table->vectorTableRsItem[tableItemCountRs++]->setText(
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
                         findContent(ip,i, "Speed"));
         }
     }
-
-
 }
 /*****************************************************
 * Function Name: findContent

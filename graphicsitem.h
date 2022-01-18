@@ -16,7 +16,7 @@
 #include <cstdlib>
 #include <settingitem.h>
 
-class GraphicsItem : public QObject, public QGraphicsItemGroup
+class GraphicsItem : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 

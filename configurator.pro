@@ -32,6 +32,7 @@ SOURCES += \
     graphicsitem.cpp \
     settingitem.cpp \
     sshcommands.cpp \
+    systemgroup.cpp \
     tableforied.cpp \
     tableformodule.cpp \
     xmlparser.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     graphicsitem.h \
     settingitem.h \
     sshcommands.h \
+    systemgroup.h \
     tableforied.h \
     tableformodule.h \
     xmlparser.h \

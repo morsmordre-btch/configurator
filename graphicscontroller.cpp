@@ -6,11 +6,15 @@ GraphicsController::GraphicsController() : GraphicsItem() {
     // в название элемента добавляем его порядковый номер
     itemCount = itemsCounter;
     itemsCounter++;
+
     _name = "КП" + QString::number(itemCount + 1);
     text->setText(_name);
 
-    addToGroup(text.get());
-    addToGroup(rectangle.get());
+    text.get()->setParentItem(this);
+    rectangle.get()->setParentItem(this);
+
+//    addToGroup(text.get());
+//    addToGroup(rectangle.get());
 
     // Создаем окно для таблицы
 
@@ -34,24 +38,27 @@ GraphicsController::GraphicsController() : GraphicsItem() {
     createContextMenu();
 
     // Debug Добавление нескольких модулей
-    graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-1",
-                                                                    this->x() - 30,
-                                                                    this->y() + 30));
-    graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-2",
-                                                                    this->x() - 30,
-                                                                    this->y() + 30*2));
-    graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-3",
-                                                                    this->x() - 30,
-                                                                    this->y() + 30*3));
+//    graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-1",
+//                                                                    this->x() - 30,
+//                                                                    this->y() + 30));
+//    graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-2",
+//                                                                    this->x() - 30,
+//                                                                    this->y() + 30*2));
+//    graphicsModuleVector.push_back(std::make_unique<GraphicsModule>("AI-3",
+//                                                                    this->x() - 30,
+//                                                                    this->y() + 30*3));
 
-    int i = 1;
-    for(auto& module : graphicsModuleVector)
-    {
-        module.get()->setParentItem(this);
-        module.get()->setPos(QPointF(-30, +35*i));
-        i++;
-        //addToGroup(module.get());
-    }
+//    int i = 1;
+//    for(auto& module : graphicsModuleVector)
+//    {
+//        module.get()->setParentItem(this);
+//        module.get()->setPos(QPointF(-30, +35*i));
+//        i++;
+//        //addToGroup(module.get());
+//    }
+
+    //setHandlesChildEvents(false);
+    setHandlesChildEvents(true);
 }
 
 GraphicsController::~GraphicsController()
@@ -61,13 +68,17 @@ GraphicsController::~GraphicsController()
 //        delete contextMenu;
 //        contextMenu = nullptr;
 //    }
-    removeFromGroup(text.get());
-    removeFromGroup(rectangle.get());
+    //removeFromGroup(text.get());
+    //removeFromGroup(rectangle.get());
 
-    for(auto& module : graphicsModuleVector)
-    {
-        removeFromGroup(module.get());
-    }
+    text->setParentItem(nullptr);
+    rectangle->setParentItem(nullptr);
+
+//    for(auto& module : graphicsModuleVector)
+//    {
+//        module.get()->setParentItem(nullptr);
+//        //removeFromGroup(module.get());
+//    }
 
     itemsCounter--;
 }
@@ -152,4 +163,39 @@ void GraphicsController::slotSettingItem() {
     _mac = settingItem->getMac();
     _login = settingItem->getLogin();
     _password = settingItem->getPassword();
+}
+
+void GraphicsController::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    // Устанавливаем координаты объекта в новые координаты минус исходные координаты
+    // мыши для плавного перемещения объекта
+    event->ignore();
+//    this->setPos(mapToScene(event->pos()) - mouseCoords);
+}
+
+void GraphicsController::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    // Запоминаем координаты мыши для плавного перемещения объекта
+    //event->ignore();
+//    mouseCoords = event->pos();
+}
+
+void GraphicsController::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    //event->ignore();
+//    Q_UNUSED(event);
+}
+
+void GraphicsController::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    table->show();
+    Q_UNUSED(event);
+}
+
+void GraphicsController::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    if(contextMenu != nullptr)
+        contextMenu->popup(event->screenPos());
+    else
+        qDebug() << "Попытка обратиться к несуществующему QMenu";
 }
