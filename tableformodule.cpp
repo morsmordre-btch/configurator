@@ -42,7 +42,7 @@ void TableForModule::updateTableForAi() {
         for(int i = 0; i < nChannels; i++){
             ui->tableWidget->insertRow(ui->tableWidget->rowCount());
             vectorTableItem.push_back(std::make_unique<QTableWidgetItem>
-                                      (moduleName + "-" + QString::number(i+1)));
+                                      (moduleName + "-" + QString::number(i)));
             ui->tableWidget->setItem(i,0,
                                      vectorTableItem[vectorTableItem.size() - 1].get());
 
@@ -72,7 +72,7 @@ void TableForModule::updateTableForDi() {
         for(int i = 0; i < nChannels; i++){
             ui->tableWidget->insertRow(ui->tableWidget->rowCount());
             vectorTableItem.push_back(std::make_unique<QTableWidgetItem>
-                                      (moduleName + "-" + QString::number(i + 1)));
+                                      (moduleName + "-" + QString::number(i)));
             ui->tableWidget->setItem(i,0,
                                      vectorTableItem[vectorTableItem.size() - 1].get());
             vectorTableItem.push_back(std::make_unique<QTableWidgetItem>

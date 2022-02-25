@@ -166,8 +166,8 @@ void XmlParser::insertToTable(SystemGroup *item) {
 
             item->cntrl->table->insertRowsForSpi();
             item->cntrl->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
-            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
-                        findContent(ip,i, "MType"));
+            item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(moduleName);
+                        //findContent(ip,i, "MType"));
             item->cntrl->table->vectorTableSpiItem[tableItemCountSpi]->setFlags(Qt::ItemIsEnabled);
             item->cntrl->table->vectorTableSpiItem[tableItemCountSpi++]->setText(
                         findContent(ip,i, "SlaveID"));
@@ -197,8 +197,8 @@ void XmlParser::insertToTable(SystemGroup *item) {
 
             item->cntrl->table->insertRowsForRs();
             item->cntrl->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
-            item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
-                        findContent(ip,i, "MType"));
+            item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(moduleName);
+                        //findContent(ip,i, "MType"));
             item->cntrl->table->vectorTableRsItem[tableItemCountRs]->setFlags(Qt::ItemIsEnabled);
             item->cntrl->table->vectorTableRsItem[tableItemCountRs++]->setText(
                         findContent(ip,i, "SlaveID"));

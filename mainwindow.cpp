@@ -21,8 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dir.mkdir("export");
     dir.mkdir("import");
-    nameXmlFile = "control_config.xml";
-    pathToXmlFile = "./export/" + nameXmlFile;
+    nameXmlFile = "192_168_0_1.xml";
+    pathToXmlFile = "./import/" + nameXmlFile;
 
     // Устанавливаем шрифт текста
     //QFont font;
@@ -162,7 +162,7 @@ void MainWindow::slotParsingXml() {
 
         for (std::size_t i = 0; i < systemVector.size(); i++)
         {
-            pathToXmlFile = "./export/" + systemVector.at(i)->cntrl->getIp().replace('.','_') + ".xml";
+            pathToXmlFile = "./import/" + systemVector.at(i)->cntrl->getIp().replace('.','_') + ".xml";
             XmlParser parser(systemVector.at(i).get(), pathToXmlFile);
 
             //parser.scene_->addItem(graphicsItemVector[GraphicsController::itemsCounter-1]->graphicsModuleVector[0].get());
